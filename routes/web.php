@@ -19,10 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
+Route::get('/telemetry', function (){ return 'telemetry'; })->name('telemetry');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/my', function (){ return 'my settings'; })->name('settings');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/my', 'HomeController@index')->name('settings');
