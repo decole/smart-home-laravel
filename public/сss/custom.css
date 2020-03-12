@@ -1,0 +1,110 @@
+.dashboard-container {
+  display: block;
+  width: 100%;
+}
+
+.dashboard-card {
+  width: 230px;
+  display: table-cell;
+  background-color: #e8eaec;
+  border: 5px solid #f4f6f9;
+}
+
+.dashboard-card-add {
+  width: 60px;
+  height: 60px;
+  display: table-cell;
+  background-color: #fbfcff;
+  border: 5px solid #f4f6f9;
+}
+
+.dashboard-title {
+  position: relative;
+  top: -2px;
+}
+
+.dashboard-title-text {
+  font-size: 14px;
+  white-space: normal;
+}
+
+.dashboard-extras {
+  position: relative;
+  top: 0;
+  right: -5px;
+  line-height: 16px;
+}
+
+.dashboard-extras-card {
+
+}
+
+.dashboard-card-container {
+  margin-bottom: 3px;
+}
+
+html {
+  background-color: #f4f6f9;
+}
+
+section > div > section.dashboard-card > div.card {
+  width: 200px;
+}
+
+.connectedSortable {
+  min-height: 30px;
+  background-color: #F4F5F7;
+}
+
+.badge-card {
+  padding: 3px;
+  margin: 0;
+}
+
+.column-example, .card-example, .task-list-example, .task-list-element-example, .todo-decole-text-edit-hide{
+  display: none;
+}
+
+.dashboard-card-media {
+  width: 270px;
+}
+
+.dashboard-column-text {
+    height: auto;
+    width: 180px;
+    display: inline-block;
+    white-space: normal;
+    font-size: 14px;
+    text-align: left;
+}
+
+.contacts-no-wrap {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.card-kanban-footer {
+  background: none;
+  padding: 0 4px 4px 4px;
+  margin: 0;
+  height: auto;
+}
+
+.row--additional {
+  margin-bottom: 8px;
+}
+
+.todo-decole-style {
+  border: 1px solid #ddd;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.todo-list>li.done {
+  text-decoration: line-through;
+}
+
+.fixing-contetn-button-task-add{
+  padding: 4px 0 5px 1px;
+}
