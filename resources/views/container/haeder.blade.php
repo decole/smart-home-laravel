@@ -9,10 +9,10 @@
             <a href="/" class="nav-link">Главная</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/contacts" class="nav-link">Контакты</a>
+            <a href="#" class="nav-link">Контакты</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/account" class="nav-link">Настройки</a>
+            <a href="#" class="nav-link">Настройки</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="/logout" class="nav-link">Выход</a>

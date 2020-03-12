@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,17 +13,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect()->route('index');
 });
+
+Route::get('/','HomeController@index')->name('index');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/telemetry', function (){ return 'telemetry'; })->name('telemetry');
-
-Route::get('/my', function (){ return 'my settings'; })->name('settings');
-
-//Route::get('/my', 'HomeController@index')->name('settings');
+Route::resource('/sensors', 'MqttSensorController');

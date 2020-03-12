@@ -16,7 +16,7 @@
                 <img src="https://www.gravatar.com/avatar/<?=md5(Auth::user()->email)?>.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="{{ route('settings') }}" class="d-block">{{ Auth::user()->name }}</a>
+                <a href="#" class="d-block">{{ Auth::user()->name }}</a>
             </div>
         </div>
 
@@ -26,98 +26,59 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-cogs"></i>
                         <p>
-                            Главная
+                            Settings
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('telemetry') }}" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-folder-open"></i>
                         <p>
-                            Телеметрия
+                            All data
                         </p>
                     </a>
                 </li>
-{{--                <li class="nav-item">--}}
-{{--                    <a href="/files" class="nav-link">--}}
-{{--                        <i class="fas fa-file"></i>--}}
-{{--                        <p>--}}
-{{--                            Files--}}
-{{--                        </p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a href="/trackers" class="nav-link">--}}
-{{--                        <i class="fa fa-fw fa-list-ol"></i>--}}
-{{--                        <p>--}}
-{{--                            Trackers--}}
-{{--                        </p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a href="/agiledashboard" class="nav-link">--}}
-{{--                        <i class="fa fa-fw fa-table"></i>--}}
-{{--                        <p>--}}
-{{--                            Agile Dashboard--}}
-{{--                        </p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a href="/wiki" class="nav-link">--}}
-{{--                        <i class="fab fa-wikipedia-w"></i>--}}
-{{--                        <p>--}}
-{{--                            Wiki--}}
-{{--                        </p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-                {{--<li class="nav-item">--}}
-                    {{--<a href="#" class="nav-link">--}}
-                        {{--<i class="nav-icon fas fa-calendar-alt"></i>--}}
-                        {{--<p>--}}
-                            {{--Calendar--}}
-                            {{--<span class="badge badge-info right">2</span>--}}
-                        {{--</p>--}}
-                    {{--</a>--}}
-                {{--</li>--}}
-                {{--<li class="nav-item has-treeview">--}}
-                    {{--<a href="#" class="nav-link">--}}
-                        {{--<i class="nav-icon far fa-envelope"></i>--}}
-                        {{--<p>--}}
-                            {{--Mailbox--}}
-                            {{--<i class="fas fa-angle-left right"></i>--}}
-                            {{--<span class="badge badge-info right">2</span>--}}
-                        {{--</p>--}}
-                    {{--</a>--}}
-                    {{--<ul class="nav nav-treeview">--}}
-                        {{--<li class="nav-item">--}}
-                            {{--<a href="pages/mailbox/mailbox.html" class="nav-link">--}}
-                                {{--<i class="far fa-circle nav-icon"></i>--}}
-                                {{--<p>Inbox</p>--}}
-                                {{--<span class="badge badge-info right">2</span>--}}
-                            {{--</a>--}}
-                        {{--</li>--}}
-                        {{--<li class="nav-item">--}}
-                            {{--<a href="pages/mailbox/compose.html" class="nav-link">--}}
-                                {{--<i class="far fa-circle nav-icon"></i>--}}
-                                {{--<p>Compose</p>--}}
-                            {{--</a>--}}
-                        {{--</li>--}}
-                        {{--<li class="nav-item">--}}
-                            {{--<a href="pages/mailbox/read-mail.html" class="nav-link">--}}
-                                {{--<i class="far fa-circle nav-icon"></i>--}}
-                                {{--<p>Read</p>--}}
-                            {{--</a>--}}
-                        {{--</li>--}}
-                    {{--</ul>--}}
-                {{--</li>--}}
-                <li class="nav-header">MISCELLANEOUS</li>
                 <li class="nav-item">
-                    <a href="https://adminlte.io/docs/3.0" class="nav-link">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>Documentation</p>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-file"></i>
+                        <p>
+                            Sensors
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-fw fa-list-ol"></i>
+                        <p>
+                            Relays
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-fw fa-table"></i>
+                        <p>
+                            Wattering
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fab fa-wikipedia-w"></i>
+                        <p>
+                            FireSecurity
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fab fa-wikipedia-w"></i>
+                        <p>
+                            Security
+                        </p>
                     </a>
                 </li>
             </ul>
