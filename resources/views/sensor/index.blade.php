@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Начальная')
+@section('title', 'Sensors CRUD (READ)')
 
 @section('footer-scripts')
     @parent
@@ -28,7 +28,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="ion ion-clipboard mr-1"></i>
-                        To Do List
+                        Sernsor list
                     </h3>
 
                     <div class="card-tools">
@@ -43,14 +43,12 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <h1 class="display-3">Contacts</h1>
-                    <table class="table table-striped">
+                    <table class="table table-bordered">
                         <thead>
                         <tr>
                             <td>ID</td>
                             <td>Name</td>
                             <td>Topic</td>
-                            <td>Payload</td>
                             <td>Type</td>
                             <td>Location</td>
                             <td colspan = 2>Actions</td>
@@ -62,7 +60,6 @@
                                 <td>{{$sensor->id}}</td>
                                 <td>{{$sensor->name}}</td>
                                 <td>{{$sensor->topic}}</td>
-                                <td>{{$sensor->payload}}</td>
                                 <td>{{$sensor->type}}</td>
                                 <td>{{$sensor->location}}</td>
                                 <td>
@@ -82,7 +79,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <a style="margin: 19px;" href="{{ route('sensors.create')}}" class="btn btn-info float-right"><i class="fas fa-plus"></i> New contact</a>
+                    <a style="margin: 19px;" href="{{ route('sensors.create')}}" class="btn btn-info float-right"><i class="fas fa-plus"></i> New sensor</a>
 {{--                    <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>--}}
                 </div>
             </div>

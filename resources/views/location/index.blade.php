@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Type CRUD (READ)')
+@section('title', 'Location CRUD (READ)')
 
 @section('footer-scripts')
     @parent
@@ -28,7 +28,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="ion ion-clipboard mr-1"></i>
-                        Type list
+                        Location list
                     </h3>
 
                     <div class="card-tools">
@@ -48,21 +48,21 @@
                         <tr>
                             <td>ID</td>
                             <td>Name</td>
-                            <td>Type</td>
+                            <td>Location</td>
                             <td colspan = 2>Actions</td>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($typeDevice as $type)
+                        @foreach($locationDevices as $location)
                             <tr>
-                                <td>{{$type->id}}</td>
-                                <td>{{$type->name}}</td>
-                                <td>{{$type->type}}</td>
+                                <td>{{$location->id}}</td>
+                                <td>{{$location->name}}</td>
+                                <td>{{$location->location}}</td>
                                 <td>
-                                    <a href="{{ route('types.edit',$type->id)}}" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('locations.edit',$location->id)}}" class="btn btn-primary">Edit</a>
                                 </td>
                                 <td>
-                                    <form action="{{ route('types.destroy', $type->id)}}" method="post">
+                                    <form action="{{ route('locations.destroy', $location->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-danger" type="submit">Delete</button>
@@ -75,7 +75,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <a style="margin: 19px;" href="{{ route('types.create')}}" class="btn btn-info float-right"><i class="fas fa-plus"></i> New type</a>
+                    <a style="margin: 19px;" href="{{ route('locations.create')}}" class="btn btn-info float-right"><i class="fas fa-plus"></i> New location</a>
 {{--                    <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>--}}
                 </div>
             </div>

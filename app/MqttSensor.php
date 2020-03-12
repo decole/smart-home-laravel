@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string $topic
- * @property string $payload
  * @property string $message_info
  * @property string $message_ok
  * @property string $message_warn
@@ -41,7 +40,6 @@ class MqttSensor extends Model
     protected $fillable = [
         'name',
         'topic',
-        'payload',
         'message_info',
         'message_ok',
         'message_warn',

@@ -31,10 +31,7 @@ class CreateMqttSensorsTable extends Migration
             $table->index(['name', 'location']);
         });
 
-        Schema::create(/**
-         * @param Blueprint $table
-         */
-            'mqtt_sensors', function (Blueprint $table) {
+        Schema::create('mqtt_sensors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('topic');

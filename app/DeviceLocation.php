@@ -25,4 +25,9 @@ use Illuminate\Database\Eloquent\Model;
 class DeviceLocation extends Model
 {
     protected $table = 'locations';
+
+    protected $fillable = [
+        'name',
+        'location',
+    ];
 }

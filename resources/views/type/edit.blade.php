@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Начальная')
+@section('title', 'Sensors CRUD (UPDATE)')
 
 @section('footer-scripts')
     @parent
@@ -15,7 +15,7 @@
 
             <!-- TO DO List -->
             <div class="card">
-                <form method="post" action="{{ route('sensors.update', $sensor->id) }}">
+                <form method="post" action="{{ route('types.update', $type->id) }}">
                     @csrf
                     @method('PATCH')
                 <div class="card-header">
@@ -37,42 +37,18 @@
                     @endif
                             <div class="form-group">
                                 <label for="name">Name:</label>
-                                <input type="text" class="form-control" name="name" value="{{ $sensor->name }}" />
+                                <input type="text" class="form-control" name="name" value="{{ $type->name }}" />
                             </div>
 
                             <div class="form-group">
                                 <label for="topic">Topic:</label>
-                                <input type="text" class="form-control" name="topic" value="{{ $sensor->topic }}" />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="payload">Payload:</label>
-                                <input type="text" class="form-control" name="payload" value="{{ $sensor->payload }}" />
-                            </div>
-                            <div class="form-group">
-                                <label for="message_info">Message-info:</label>
-                                <input type="text" class="form-control" name="message_info" value="{{ $sensor->message_info }}" />
-                            </div>
-                            <div class="form-group">
-                                <label for="message_ok">Message-ok:</label>
-                                <input type="text" class="form-control" name="message_ok" value="{{ $sensor->message_ok }}" />
-                            </div>
-                            <div class="form-group">
-                                <label for="message_warn">Message warning:</label>
-                                <input type="text" class="form-control" name="message_warn" value="{{ $sensor->message_warn }}" />
-                            </div>
-                            <div class="form-group">
-                                <label for="type">Type sensor:</label>
-                                <input type="text" class="form-control" name="type" value="{{ $sensor->type }}" />
-                            </div>
-                            <div class="form-group">
-                                <label for="location">Location:</label>
-                                <input type="text" class="form-control" name="location" value="{{ $sensor->location }}" />
+                                <input type="text" class="form-control" name="type" value="{{ $type->type }}" />
                             </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Update sensor</button>
+                    <a class="btn btn-info" href="{{ route('types.index') }}">К списку типов</a>
+                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Update type</button>
                 </div>
                 </form>
             </div>

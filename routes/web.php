@@ -27,3 +27,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/sensors', 'MqttSensorController');
 
 Route::resource('/types', 'DeviceTypeController');
+
+Route::resource('/locations', 'DeviceLocationController');

@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('sensors.index') }}" class="nav-link">
                         <i class="fas fa-file"></i>
                         <p>
                             Sensors
@@ -78,6 +78,22 @@
                         <i class="fab fa-wikipedia-w"></i>
                         <p>
                             Security
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('types.index')}}" class="nav-link">
+                        <i class="fa fa-fw fa-table"></i>
+                        <p>
+                            Type Devices
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('locations.index')}}" class="nav-link">
+                        <i class="fa fa-fw fa-table"></i>
+                        <p>
+                            Location Devices
                         </p>
                     </a>
                 </li>

@@ -25,4 +25,9 @@ use Illuminate\Database\Eloquent\Model;
 class DeviceType extends Model
 {
     protected $table = 'type_devices';
+
+    protected $fillable = [
+        'name',
+        'type',
+    ];
 }

@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Начальная')
+@section('title', 'Sensors CRUD (CREATE)')
 
 @section('footer-scripts')
     @parent
@@ -12,7 +12,7 @@
         <!-- Left col -->
         <section class="col-lg-7 connectedSortable">
 
-
+        {{ route('sensors.index') }}
             <!-- TO DO List -->
             <div class="card">
                 <form method="post" action="{{ route('sensors.store') }}">
@@ -21,15 +21,7 @@
                         <i class="ion ion-clipboard mr-1"></i>
                         Create sensor
                     </h3>
-{{--                    <div class="card-tools">--}}
-{{--                        <ul class="pagination pagination-sm">--}}
-{{--                            <li class="page-item"><a href="#" class="page-link">&laquo;</a></li>--}}
-{{--                            <li class="page-item"><a href="#" class="page-link">1</a></li>--}}
-{{--                            <li class="page-item"><a href="#" class="page-link">2</a></li>--}}
-{{--                            <li class="page-item"><a href="#" class="page-link">3</a></li>--}}
-{{--                            <li class="page-item"><a href="#" class="page-link">&raquo;</a></li>--}}
-{{--                        </ul>--}}
-{{--                    </div>--}}
+
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -45,42 +37,38 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name">Name:</label>
-                                <input type="text" class="form-control" name="name"/>
+                                <input type="text" class="form-control" name="name" value="{{ old('name') }}" />
                             </div>
 
                             <div class="form-group">
                                 <label for="topic">Topic:</label>
-                                <input type="text" class="form-control" name="topic"/>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="payload">Payload:</label>
-                                <input type="text" class="form-control" name="payload"/>
+                                <input type="text" class="form-control" name="topic" value="{{ old('topic') }}" />
                             </div>
                             <div class="form-group">
                                 <label for="message_info">Message-info:</label>
-                                <input type="text" class="form-control" name="message_info"/>
+                                <input type="text" class="form-control" name="message_info" value="{{ old('message_info') }}" />
                             </div>
                             <div class="form-group">
                                 <label for="message_ok">Message-ok:</label>
-                                <input type="text" class="form-control" name="message_ok"/>
+                                <input type="text" class="form-control" name="message_ok" value="{{ old('message_ok') }}" />
                             </div>
                             <div class="form-group">
                                 <label for="message_warn">Message warning:</label>
-                                <input type="text" class="form-control" name="message_warn"/>
+                                <input type="text" class="form-control" name="message_warn" value="{{ old('message_warn') }}" />
                             </div>
                             <div class="form-group">
                                 <label for="type">Type sensor:</label>
-                                <input type="text" class="form-control" name="type"/>
+                                <input type="text" class="form-control" name="type" value="{{ old('type') }}" />
                             </div>
                             <div class="form-group">
                                 <label for="location">Location:</label>
-                                <input type="text" class="form-control" name="location"/>
+                                <input type="text" class="form-control" name="location" value="{{ old('location') }}" />
                             </div>
-{{--                            <button type="submit" class="btn btn-primary-outline">Add contact</button>--}}
+
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
+                    <a class="btn btn-info" href="{{ route('sensors.index') }}">к списку сеносров</a>
                     <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add sensor</button>
                 </div>
                 </form>

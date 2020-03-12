@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Начальная')
+@section('title', 'Sensors CRUD (UPDATE)')
 
 @section('footer-scripts')
     @parent
@@ -44,11 +44,6 @@
                                 <label for="topic">Topic:</label>
                                 <input type="text" class="form-control" name="topic" value="{{ $sensor->topic }}" />
                             </div>
-
-                            <div class="form-group">
-                                <label for="payload">Payload:</label>
-                                <input type="text" class="form-control" name="payload" value="{{ $sensor->payload }}" />
-                            </div>
                             <div class="form-group">
                                 <label for="message_info">Message-info:</label>
                                 <input type="text" class="form-control" name="message_info" value="{{ $sensor->message_info }}" />
@@ -72,6 +67,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
+                    <a class="btn btn-info" href="{{ route('sensors.index') }}">к списку сеносров</a>
                     <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Update sensor</button>
                 </div>
                 </form>
