@@ -10,16 +10,14 @@
         <div class="container-fluid">
     <div class="row">
         <!-- Left col -->
-        <section class="col-lg-7 connectedSortable">
+        <section class="col-lg-6 connectedSortable">
 
-        {{ route('sensors.index') }}
-            <!-- TO DO List -->
             <div class="card">
                 <form method="post" action="{{ route('sensors.store') }}">
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="ion ion-clipboard mr-1"></i>
-                        Create sensor
+                        Добавление Сенсора
                     </h3>
 
                 </div>
@@ -36,40 +34,43 @@
                     @endif
                             @csrf
                             <div class="form-group">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" name="name" value="{{ old('name') }}" />
+                                <label for="name">Название:</label>
+                                <input type="text" class="form-control" name="name" autocomplete="off" value="{{ old('name') }}" />
                             </div>
 
                             <div class="form-group">
-                                <label for="topic">Topic:</label>
-                                <input type="text" class="form-control" name="topic" value="{{ old('topic') }}" />
+                                <label for="topic">Тема (Topic):</label>
+                                <input type="text" class="form-control" name="topic" autocomplete="off" value="{{ old('topic') }}" />
                             </div>
                             <div class="form-group">
-                                <label for="message_info">Message-info:</label>
-                                <input type="text" class="form-control" name="message_info" value="{{ old('message_info') }}" />
+                                <label for="message_info">Текст информации о датчике:</label>
+                                <input type="text" class="form-control" name="message_info" autocomplete="off" value="{{ old('message_info') }}" />
                             </div>
                             <div class="form-group">
-                                <label for="message_ok">Message-ok:</label>
-                                <input type="text" class="form-control" name="message_ok" value="{{ old('message_ok') }}" />
+                                <label for="message_ok">Текст успешного выполнения:</label>
+                                <input type="text" class="form-control" name="message_ok" autocomplete="off" value="{{ old('message_ok') }}" />
                             </div>
                             <div class="form-group">
-                                <label for="message_warn">Message warning:</label>
-                                <input type="text" class="form-control" name="message_warn" value="{{ old('message_warn') }}" />
+                                <label for="message_warn">Текст ошибки:</label>
+                                <input type="text" class="form-control" name="message_warn" autocomplete="off" value="{{ old('message_warn') }}" />
                             </div>
                             <div class="form-group">
-                                <label for="type">Type sensor:</label>
-                                <input type="text" class="form-control" name="type" value="{{ old('type') }}" />
+                                <label for="type">Тип датчика:</label>
+{{--                                <input type="text" class="form-control" name="type" value="{{ old('type') }}" />--}}
+                                {{ Form::select('type', $types, null, ['class'=> 'form-control'])  }}
                             </div>
                             <div class="form-group">
-                                <label for="location">Location:</label>
-                                <input type="text" class="form-control" name="location" value="{{ old('location') }}" />
+                                <label for="location">Место нахождения датчика:</label>
+                                {{ Form::select('location', $locations, null, ['class'=> 'form-control'])  }}
                             </div>
+
+
 
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <a class="btn btn-info" href="{{ route('sensors.index') }}">к списку сеносров</a>
-                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add sensor</button>
+                    <a class="btn btn-info" href="{{ route('sensors.index') }}">К списку Сеносров</a>
+                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Добавить Сенсор</button>
                 </div>
                 </form>
             </div>

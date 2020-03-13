@@ -20,7 +20,7 @@
     </div>
     <div class="row">
         <!-- Left col -->
-        <section class="col-lg-12 connectedSortable">
+        <section class="col-lg-6 connectedSortable">
 
 
             <!-- TO DO List -->
@@ -28,7 +28,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="ion ion-clipboard mr-1"></i>
-                        Type list
+                        Список Типов датчиков
                     </h3>
 
                     <div class="card-tools">
@@ -47,9 +47,9 @@
                         <thead>
                         <tr>
                             <td>ID</td>
-                            <td>Name</td>
-                            <td>Type</td>
-                            <td colspan = 2>Actions</td>
+                            <td>Имя</td>
+                            <td>Тип</td>
+                            <td colspan = 2>Действия</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -59,13 +59,13 @@
                                 <td>{{$type->name}}</td>
                                 <td>{{$type->type}}</td>
                                 <td>
-                                    <a href="{{ route('types.edit',$type->id)}}" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('types.edit',$type->id)}}" class="btn btn-primary btn-sm">Изменить</a>
                                 </td>
                                 <td>
                                     <form action="{{ route('types.destroy', $type->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                        <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
                                     </form>
                                 </td>
                             </tr>
@@ -75,7 +75,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <a style="margin: 19px;" href="{{ route('types.create')}}" class="btn btn-info float-right"><i class="fas fa-plus"></i> New type</a>
+                    <a href="{{ route('types.create')}}" class="btn btn-info btn-sm float-right"><i class="fas fa-plus"></i> Добавить Тип датчиков</a>
 {{--                    <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>--}}
                 </div>
             </div>

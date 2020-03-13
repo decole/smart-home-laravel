@@ -22,9 +22,8 @@ class DeviceTypeController extends Controller
     public function index()
     {
         $typeDevice = DeviceType::all()->sortBy('id');
-        $error = null;
 
-        return view('type.index', compact('typeDevice'))->with('error');
+        return view('type.index', compact('typeDevice'));
 
     }
 
@@ -35,9 +34,7 @@ class DeviceTypeController extends Controller
      */
     public function create()
     {
-        return view('type.create', [
-            'error'=>null,
-        ]);
+        return view('type.create');
     }
 
     /**
@@ -83,9 +80,8 @@ class DeviceTypeController extends Controller
     public function edit($id)
     {
         $type = DeviceType::find($id);
-        $error = null;
 
-        return view('type.edit', compact('type'))->with('error');
+        return view('type.edit', compact('type'));
 
     }
 
@@ -110,7 +106,6 @@ class DeviceTypeController extends Controller
 
         return redirect('/types')->with([
             'success' => 'Type updated!',
-            'error' => null,
         ]);
 
     }
@@ -129,7 +124,6 @@ class DeviceTypeController extends Controller
 
         return redirect('/types')->with([
             'success' => 'Type deleted!',
-            'error' => null,
         ]);
 
     }

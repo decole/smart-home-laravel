@@ -35,6 +35,30 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
+                        <i class="fas fa-tint"></i></i>
+                        <p>
+                            Wattering
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fab fa-free-code-camp"></i>
+                        <p>
+                            FireSecurity
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-user-lock"></i>
+                        <p>
+                            Security
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-folder-open"></i>
                         <p>
                             All data
@@ -43,7 +67,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('sensors.index') }}" class="nav-link">
-                        <i class="fas fa-file"></i>
+                        <i class="fas fa-puzzle-piece"></i>
                         <p>
                             Sensors
                         </p>
@@ -51,39 +75,15 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-fw fa-list-ol"></i>
+                        <i class="fas fa-puzzle-piece"></i>
                         <p>
                             Relays
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fa fa-fw fa-table"></i>
-                        <p>
-                            Wattering
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fab fa-wikipedia-w"></i>
-                        <p>
-                            FireSecurity
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fab fa-wikipedia-w"></i>
-                        <p>
-                            Security
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="{{ route('types.index')}}" class="nav-link">
-                        <i class="fa fa-fw fa-table"></i>
+                        <i class="fas fa-puzzle-piece"></i>
                         <p>
                             Type Devices
                         </p>
@@ -91,7 +91,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('locations.index')}}" class="nav-link">
-                        <i class="fa fa-fw fa-table"></i>
+                        <i class="fas fa-puzzle-piece"></i>
                         <p>
                             Location Devices
                         </p>

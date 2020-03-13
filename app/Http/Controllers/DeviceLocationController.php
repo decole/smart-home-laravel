@@ -21,9 +21,8 @@ class DeviceLocationController extends Controller
     public function index()
     {
         $locationDevices = DeviceLocation::all()->sortBy('id');
-        $error = null;
 
-        return view('location.index', compact('locationDevices'))->with('error');
+        return view('location.index', compact('locationDevices'));
 
     }
 
@@ -34,9 +33,7 @@ class DeviceLocationController extends Controller
      */
     public function create()
     {
-        return view('location.create', [
-            'error'=>null,
-        ]);
+        return view('location.create');
     }
 
     /**
@@ -109,7 +106,6 @@ class DeviceLocationController extends Controller
 
         return redirect('/locations')->with([
             'success' => 'Location updated!',
-            'error' => null,
         ]);
 
     }
@@ -128,7 +124,6 @@ class DeviceLocationController extends Controller
 
         return redirect('/locations')->with([
             'success' => 'Location deleted!',
-            'error' => null,
         ]);
 
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DeviceLocation;
+use App\DeviceType;
 use App\MqttSensor;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -21,10 +23,12 @@ class MqttSensorController extends Controller
      */
     public function index()
     {
-        $sensors = MqttSensor::all()->sortBy('id');
-        $error = null;
+        $sensors = MqttSensor::where('id', '>', 0)
+            ->orderBy('id', 'asc')
+            ->with(['devicetype','devicelocation'])
+            ->paginate(15);
 
-        return view('sensor.index', compact('sensors'))->with('error');
+        return view('sensor.index', compact('sensors'));
 
     }
 
@@ -35,8 +39,11 @@ class MqttSensorController extends Controller
      */
     public function create()
     {
+        $types = DeviceType::all()->pluck('name', 'id');
+        $locations = DeviceLocation::all()->pluck('name', 'id');
         return view('sensor.create', [
-            'error'=>null,
+            'locations' => $locations,
+            'types' => $types,
         ]);
     }
 
@@ -61,7 +68,6 @@ class MqttSensorController extends Controller
             'message_warn'=>$request->get('message_warn'),
             'type'=>$request->get('type'),
             'location'=>$request->get('location'),
-
         ]);
         $sensor->save();
 
@@ -89,9 +95,8 @@ class MqttSensorController extends Controller
     public function edit($id)
     {
         $sensor = MqttSensor::find($id);
-        $error = null;
 
-        return view('sensor.edit', compact('sensor'))->with('error');
+        return view('sensor.edit', compact('sensor'));
 
     }
 
@@ -121,7 +126,6 @@ class MqttSensorController extends Controller
 
         return redirect('/sensors')->with([
             'success' => 'Sensor updated!',
-            'error' => null,
         ]);
 
     }
@@ -140,7 +144,6 @@ class MqttSensorController extends Controller
 
         return redirect('/sensors')->with([
             'success' => 'Sensor deleted!',
-            'error' => null,
         ]);
 
     }

@@ -178,6 +178,8 @@ return [
         // https://github.com/barryvdh/laravel-ide-helper
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
+        // https://www.itsolutionstuff.com/post/laravel-6-form-class-not-found-solutionexample.html
+        Collective\Html\HtmlServiceProvider::class,
     ],
 
     /*
@@ -229,6 +231,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

@@ -30,4 +30,5 @@ class DeviceLocation extends Model
         'name',
         'location',
     ];
+
 }

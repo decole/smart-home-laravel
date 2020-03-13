@@ -21,7 +21,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="ion ion-clipboard mr-1"></i>
-                        Edit location
+                        Изменение Места расположения датчиков
                     </h3>
                 </div>
                 <!-- /.card-header -->
@@ -36,19 +36,19 @@
                         </div><br />
                     @endif
                             <div class="form-group">
-                                <label for="name">Name:</label>
+                                <label for="name">Название:</label>
                                 <input type="text" class="form-control" name="name" value="{{ $location->name }}" />
                             </div>
 
                             <div class="form-group">
-                                <label for="topic">Location:</label>
+                                <label for="topic">Место:</label>
                                 <input type="text" class="form-control" name="location" value="{{ $location->location }}" />
                             </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <a class="btn btn-info" href="{{ route('locations.index') }}">К списку мест датчиков</a>
-                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Update location</button>
+                    <a class="btn btn-info" href="{{ route('locations.index') }}">К списку Мест датчиков</a>
+                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Изменить место</button>
                 </div>
                 </form>
             </div>

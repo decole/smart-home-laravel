@@ -52,7 +52,7 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Корень</a></li>
+                            <li class="breadcrumb-item"><a href="/">Корень</a></li>
                             <li class="breadcrumb-item active">@yield('title')</li>
                         </ol>
                     </div><!-- /.col -->
@@ -63,33 +63,6 @@
 
         <!-- Main content -->
         @yield('content')
-        @if($error)
-        <section class="content dashboard-container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-default">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                Уведомлялка ебучая
-                            </h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="alert alert-danger alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <h5><i class="icon fas fa-ban"></i> Алярма !</h5>
-                                {{ $error }}
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-            </div>
-        </section>
-        @endif
     </div>
     <!-- /.content-wrapper -->
 

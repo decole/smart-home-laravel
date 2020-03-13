@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereTopic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereUpdatedAt($value)
+ * @property-read \App\DeviceLocation|null $devicelocation
+ * @property-read \App\DeviceType|null $devicetype
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereLocation($value)
  */
 class MqttSensor extends Model
 {
@@ -47,12 +50,12 @@ class MqttSensor extends Model
         'location',
     ];
 
-    public function deviceType()
+    public function devicetype()
     {
         return $this->belongsTo(DeviceType::class, 'type');
     }
 
-    public function deviceLocation()
+    public function devicelocation()
     {
         return $this->belongsTo(DeviceLocation::class, 'location');
     }
