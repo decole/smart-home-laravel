@@ -23,7 +23,7 @@ class DeviceTypeController extends Controller
     {
         $typeDevice = DeviceType::all()->sortBy('id');
 
-        return view('type.index', compact('typeDevice'));
+        return view('crud.type.index', compact('typeDevice'));
 
     }
 
@@ -34,7 +34,7 @@ class DeviceTypeController extends Controller
      */
     public function create()
     {
-        return view('type.create');
+        return view('crud.type.create');
     }
 
     /**
@@ -56,7 +56,7 @@ class DeviceTypeController extends Controller
         ]);
         $sensor->save();
 
-        return redirect('/types')->with('success', 'Type saved!');
+        return redirect('/types')->with('success', 'Тип датчика сохранен!');
 
     }
 
@@ -81,7 +81,7 @@ class DeviceTypeController extends Controller
     {
         $type = DeviceType::find($id);
 
-        return view('type.edit', compact('type'));
+        return view('crud.type.edit', compact('type'));
 
     }
 
@@ -105,7 +105,7 @@ class DeviceTypeController extends Controller
         $sensor->save();
 
         return redirect('/types')->with([
-            'success' => 'Type updated!',
+            'success' => 'Тип датчика обновлен!',
         ]);
 
     }
@@ -123,7 +123,7 @@ class DeviceTypeController extends Controller
         $contact->delete();
 
         return redirect('/types')->with([
-            'success' => 'Type deleted!',
+            'success' => 'Тип датчика удален!',
         ]);
 
     }

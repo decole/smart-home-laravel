@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use App\DeviceLocation;
 use App\DeviceType;
-use App\MqttSensor;
-use Exception;
+use App\MqttRelay;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
-class MqttSensorController extends Controller
+class MqttRelayController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,12 +21,12 @@ class MqttSensorController extends Controller
      */
     public function index()
     {
-        $sensors = MqttSensor::where('id', '>', 0)
+        $relays = MqttRelay::where('id', '>', 0)
             ->orderBy('id', 'asc')
             ->with(['devicetype','devicelocation'])
             ->paginate(15);
 
-        return view('crud.sensor.index', compact('sensors'));
+        return view('crud.relay.index', compact('relays'));
 
     }
 
@@ -41,7 +39,7 @@ class MqttSensorController extends Controller
     {
         $types = DeviceType::all()->pluck('name', 'id');
         $locations = DeviceLocation::all()->pluck('name', 'id');
-        return view('crud.sensor.create', [
+        return view('crud.relay.create', [
             'locations' => $locations,
             'types' => $types,
         ]);
@@ -52,6 +50,7 @@ class MqttSensorController extends Controller
      *
      * @param Request $request
      * @return RedirectResponse|Redirector
+     * @throws \Exception
      */
     public function store(Request $request)
     {
@@ -60,26 +59,36 @@ class MqttSensorController extends Controller
             'topic'=>'required',
         ]);
 
-        $sensor = new MqttSensor([
+        $notifying = ($request->get('notifying') == 'state') ? true : false;
+        $active    = ($request->get('active')    == 'state') ? true : false;
+        $sensor = new MqttRelay([
             'name'=>$request->get('name'),
             'topic'=>$request->get('topic'),
+            'check_topic'=>$request->get('check_topic'),
+            'command_on'=>$request->get('command_on'),
+            'command_off'=>$request->get('command_off'),
+            'check_command_on'=>$request->get('check_command_on'),
+            'check_command_off'=>$request->get('check_command_off'),
+            'last_command'=>$request->get('last_command'),
             'message_info'=>$request->get('message_info'),
             'message_ok'=>$request->get('message_ok'),
             'message_warn'=>$request->get('message_warn'),
             'type'=>$request->get('type'),
             'location'=>$request->get('location'),
+            'notifying'=>$notifying,
+            'active'=>$active,
         ]);
+
         $sensor->save();
 
-        return redirect('/sensors')->with('success', 'Датчик сохранен!');
-
+        return redirect('/relays')->with('success', 'Реле сохранено!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return void
+     * @param  int  $id
+     * @return Response
      */
     public function show($id)
     {
@@ -96,14 +105,13 @@ class MqttSensorController extends Controller
     {
         $types = DeviceType::all()->pluck('name', 'id');
         $locations = DeviceLocation::all()->pluck('name', 'id');
-        $sensor = MqttSensor::find($id);
+        $sensor = MqttRelay::find($id);
 
-        return view('crud.sensor.edit', [
+        return view('crud.relay.edit', [
             'sensor' => $sensor,
             'locations' => $locations,
             'types' => $types,
         ]);
-
     }
 
     /**
@@ -120,18 +128,29 @@ class MqttSensorController extends Controller
             'topic'=>'required',
         ]);
 
-        $sensor = MqttSensor::find($id);
-        $sensor->name = $request->get('name');
+        $notifying = ($request->get('notifying') == 'state') ? true : false;
+        $active    = ($request->get('active')    == 'state') ? true : false;
+
+        $sensor = MqttRelay::find($id);
+        $sensor->name=$request->get('name');
         $sensor->topic=$request->get('topic');
+        $sensor->check_topic=$request->get('check_topic');
+        $sensor->command_on=$request->get('command_on');
+        $sensor->command_off=$request->get('command_off');
+        $sensor->check_command_on=$request->get('check_command_on');
+        $sensor->check_command_off=$request->get('check_command_off');
+        $sensor->last_command=$request->get('last_command');
         $sensor->message_info=$request->get('message_info');
         $sensor->message_ok=$request->get('message_ok');
         $sensor->message_warn=$request->get('message_warn');
         $sensor->type=$request->get('type');
         $sensor->location=$request->get('location');
+        $sensor->notifying=$notifying;
+        $sensor->active=$active;
         $sensor->save();
 
-        return redirect('/sensors')->with([
-            'success' => 'Датчик обновлен!',
+        return redirect('/relays')->with([
+            'success' => 'Реле обновлено!',
         ]);
 
     }
@@ -141,15 +160,15 @@ class MqttSensorController extends Controller
      *
      * @param int $id
      * @return RedirectResponse|Redirector
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy($id)
     {
-        $contact = MqttSensor::find($id);
+        $contact = MqttRelay::find($id);
         $contact->delete();
 
-        return redirect('/sensors')->with([
-            'success' => 'Датчик удален!',
+        return redirect('/relays')->with([
+            'success' => 'Реле удалено!',
         ]);
 
     }

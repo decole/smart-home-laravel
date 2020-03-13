@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Type CRUD (CREATE)')
+@section('title', 'Locations CRUD (UPDATE)')
 
 @section('footer-scripts')
     @parent
@@ -10,17 +10,19 @@
         <div class="container-fluid">
     <div class="row">
         <!-- Left col -->
-        <section class="col-lg-6 connectedSortable">
+        <section class="col-lg-7 connectedSortable">
+
 
             <!-- TO DO List -->
             <div class="card">
-                <form method="post" action="{{ route('types.store') }}">
+                <form method="post" action="{{ route('locations.update', $location->id) }}">
+                    @csrf
+                    @method('PATCH')
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="ion ion-clipboard mr-1"></i>
-                        Создание Типа свойств датчиков
+                        Изменение Места расположения датчиков
                     </h3>
-
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -33,21 +35,20 @@
                             </ul>
                         </div><br />
                     @endif
-                            @csrf
                             <div class="form-group">
-                                <label for="name">Имя:</label>
-                                <input type="text" class="form-control" name="name" value="{{ old('name') }}" />
+                                <label for="name">Название:</label>
+                                <input type="text" class="form-control" name="name" value="{{ $location->name }}" />
                             </div>
 
                             <div class="form-group">
-                                <label for="topic">Тип:</label>
-                                <input type="text" class="form-control" name="type" value="{{ old('type') }}" />
+                                <label for="topic">Место:</label>
+                                <input type="text" class="form-control" name="location" value="{{ $location->location }}" />
                             </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <a class="btn btn-info" href="{{ route('types.index') }}">К списку Типов</a>
-                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Добавить Тип</button>
+                    <a class="btn btn-info" href="{{ route('locations.index') }}">К списку Мест датчиков</a>
+                    <button type="submit" class="btn btn-info float-right"><i class="fas fa-plus"></i> Изменить место</button>
                 </div>
                 </form>
             </div>

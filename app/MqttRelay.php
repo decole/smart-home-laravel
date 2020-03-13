@@ -50,5 +50,31 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MqttRelay extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'topic',
+        'check_topic',
+        'command_on',
+        'command_off',
+        'check_command_on',
+        'check_command_off',
+        'last_command',
+        'message_info',
+        'message_ok',
+        'message_warn',
+        'type',
+        'location',
+        'notifying',
+        'active',
+    ];
+
+    public function devicetype()
+    {
+        return $this->belongsTo(DeviceType::class, 'type');
+    }
+
+    public function devicelocation()
+    {
+        return $this->belongsTo(DeviceLocation::class, 'location');
+    }
 }

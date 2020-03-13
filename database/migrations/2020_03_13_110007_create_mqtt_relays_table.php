@@ -29,8 +29,8 @@ class CreateMqttRelaysTable extends Migration
             $table->string('message_warn')->nullable();
             $table->unsignedBigInteger('type')->nullable();
             $table->unsignedBigInteger('location')->nullable();
-            $table->boolean('notifying')->default(true);
-            $table->boolean('active')->default(true);
+            $table->boolean('notifying')->nullable();
+            $table->boolean('active')->nullable();
             $table->timestamps();
 
             $table->index(['name', 'topic', 'check_topic', 'location']);

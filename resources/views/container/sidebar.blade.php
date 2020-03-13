@@ -65,37 +65,64 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('sensors.index') }}" class="nav-link">
-                        <i class="fas fa-puzzle-piece"></i>
-                        <p>
-                            Sensors
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
+                <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-puzzle-piece"></i>
+                        <i class="far fa-circle nav-icon"></i>
                         <p>
-                            Relays
+                            CRUD
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('types.index')}}" class="nav-link">
-                        <i class="fas fa-puzzle-piece"></i>
-                        <p>
-                            Type Devices
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('locations.index')}}" class="nav-link">
-                        <i class="fas fa-puzzle-piece"></i>
-                        <p>
-                            Location Devices
-                        </p>
-                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('sensors.index') }}" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Sensors
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('relays.index') }}" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Relays
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('types.index')}}" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Type Devices
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('locations.index')}}" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Location Devices
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Secure Devices
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    FireSecure Devices
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>

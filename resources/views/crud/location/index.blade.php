@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Location CRUD (READ)')
+@section('title', 'Locations CRUD (READ)')
 
 @section('footer-scripts')
     @parent

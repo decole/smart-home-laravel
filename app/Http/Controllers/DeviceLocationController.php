@@ -22,7 +22,7 @@ class DeviceLocationController extends Controller
     {
         $locationDevices = DeviceLocation::all()->sortBy('id');
 
-        return view('location.index', compact('locationDevices'));
+        return view('crud.location.index', compact('locationDevices'));
 
     }
 
@@ -33,7 +33,7 @@ class DeviceLocationController extends Controller
      */
     public function create()
     {
-        return view('location.create');
+        return view('crud.location.create');
     }
 
     /**
@@ -55,7 +55,7 @@ class DeviceLocationController extends Controller
         ]);
         $sensor->save();
 
-        return redirect('/locations')->with('success', 'Location saved!');
+        return redirect('/locations')->with('success', 'Место расположения сохранено!');
 
     }
 
@@ -81,7 +81,7 @@ class DeviceLocationController extends Controller
         $location = DeviceLocation::find($id);
         $error = null;
 
-        return view('location.edit', compact('location'))->with('error');
+        return view('crud.location.edit', compact('location'))->with('error');
 
     }
 
@@ -105,7 +105,7 @@ class DeviceLocationController extends Controller
         $sensor->save();
 
         return redirect('/locations')->with([
-            'success' => 'Location updated!',
+            'success' => 'Место расположения обновлено!',
         ]);
 
     }
@@ -123,7 +123,7 @@ class DeviceLocationController extends Controller
         $contact->delete();
 
         return redirect('/locations')->with([
-            'success' => 'Location deleted!',
+            'success' => 'Место расположения удалено!',
         ]);
 
     }
