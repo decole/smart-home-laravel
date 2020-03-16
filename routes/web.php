@@ -31,3 +31,7 @@ Route::resource('/relays', 'MqttRelayController');
 Route::resource('/types', 'DeviceTypeController');
 
 Route::resource('/locations', 'DeviceLocationController');
+
+Route::resource('/secure', 'SecureController');
+
+Route::resource('/fire_secure', 'FireSecureController');

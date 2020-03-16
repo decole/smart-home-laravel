@@ -91,7 +91,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('types.index')}}" class="nav-link">
+                            <a href="{{ route('types.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
                                     Type Devices
@@ -99,7 +99,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('locations.index')}}" class="nav-link">
+                            <a href="{{ route('locations.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
                                     Location Devices
@@ -107,7 +107,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('secure.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
                                     Secure Devices
@@ -115,7 +115,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('fire_secure.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
                                     FireSecure Devices

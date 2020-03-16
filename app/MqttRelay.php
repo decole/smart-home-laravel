@@ -47,6 +47,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttRelay whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttRelay whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\DeviceLocation|null $devicelocation
+ * @property-read \App\DeviceType|null $devicetype
  */
 class MqttRelay extends Model
 {
