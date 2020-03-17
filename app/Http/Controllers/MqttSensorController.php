@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\DeviceLocation;
-use App\DeviceType;
 use App\MqttSensor;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
 class MqttSensorController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -39,11 +37,9 @@ class MqttSensorController extends Controller
      */
     public function create()
     {
-        $types = DeviceType::all()->pluck('name', 'id');
-        $locations = DeviceLocation::all()->pluck('name', 'id');
         return view('crud.sensor.create', [
-            'locations' => $locations,
-            'types' => $types,
+            'locations' => self::locationsList(),
+            'types' => self::typesList(),
         ]);
     }
 
@@ -60,16 +56,8 @@ class MqttSensorController extends Controller
             'topic'=>'required',
         ]);
 
-        $sensor = new MqttSensor([
-            'name'=>$request->get('name'),
-            'topic'=>$request->get('topic'),
-            'message_info'=>$request->get('message_info'),
-            'message_ok'=>$request->get('message_ok'),
-            'message_warn'=>$request->get('message_warn'),
-            'type'=>$request->get('type'),
-            'location'=>$request->get('location'),
-        ]);
-        $sensor->save();
+        $model = new MqttSensor;
+        $model->storeSensor($request);
 
         return redirect('/sensors')->with('success', 'Датчик сохранен!');
 
@@ -94,14 +82,12 @@ class MqttSensorController extends Controller
      */
     public function edit($id)
     {
-        $types = DeviceType::all()->pluck('name', 'id');
-        $locations = DeviceLocation::all()->pluck('name', 'id');
         $sensor = MqttSensor::find($id);
 
         return view('crud.sensor.edit', [
             'sensor' => $sensor,
-            'locations' => $locations,
-            'types' => $types,
+            'locations' => self::locationsList(),
+            'types' => self::typesList(),
         ]);
 
     }
@@ -120,15 +106,8 @@ class MqttSensorController extends Controller
             'topic'=>'required',
         ]);
 
-        $sensor = MqttSensor::find($id);
-        $sensor->name = $request->get('name');
-        $sensor->topic=$request->get('topic');
-        $sensor->message_info=$request->get('message_info');
-        $sensor->message_ok=$request->get('message_ok');
-        $sensor->message_warn=$request->get('message_warn');
-        $sensor->type=$request->get('type');
-        $sensor->location=$request->get('location');
-        $sensor->save();
+        $model = new MqttSensor;
+        $model->updateSensor($id, $request);
 
         return redirect('/sensors')->with([
             'success' => 'Датчик обновлен!',

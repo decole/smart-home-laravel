@@ -32,11 +32,10 @@ class SecureController extends Controller
      */
     public function create()
     {
-        $types = DeviceType::all()->pluck('name', 'id');
         $locations = DeviceLocation::all()->pluck('name', 'id');
         return view('crud.secure.create', [
-            'locations' => $locations,
-            'types' => $types,
+            'locations' => self::locationsList(),
+            'types' => self::typesList(),
         ]);
     }
 
@@ -53,24 +52,8 @@ class SecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $notifying = ($request->get('notifying') == 'state') ? true : false;
-        $active    = ($request->get('active')    == 'state') ? true : false;
-        $trigger   = ($request->get('trigger')    == 'state') ? true : false;
-        $sensor = new MqttSecure([
-            'name'=>$request->get('name'),
-            'topic'=>$request->get('topic'),
-            'trigger'=>$trigger,
-            'current_command'=>$request->get('current_command'),
-            'message_info'=>$request->get('message_info'),
-            'message_ok'=>$request->get('message_ok'),
-            'message_warn'=>$request->get('message_warn'),
-            'type'=>$request->get('type'),
-            'location'=>$request->get('location'),
-            'notifying'=>$notifying,
-            'active'=>$active,
-        ]);
-
-        $sensor->save();
+        $model = new MqttSecure;
+        $model->storeSecureSensor($request);
 
         return redirect('/secure')->with('success', 'Датчик системы безопасности добавлен!');
 
@@ -95,14 +78,12 @@ class SecureController extends Controller
      */
     public function edit($id)
     {
-        $types = DeviceType::all()->pluck('name', 'id');
-        $locations = DeviceLocation::all()->pluck('name', 'id');
         $sensor = MqttSecure::find($id);
 
         return view('crud.secure.edit', [
             'sensor' => $sensor,
-            'locations' => $locations,
-            'types' => $types,
+            'locations' => self::locationsList(),
+            'types' => self::typesList(),
         ]);
 
     }
@@ -121,23 +102,8 @@ class SecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $notifying = ($request->get('notifying') == 'state') ? true : false;
-        $active    = ($request->get('active')    == 'state') ? true : false;
-        $trigger   = ($request->get('trigger')   == 'state') ? true : false;
-
-        $sensor = MqttSecure::find($id);
-        $sensor->name=$request->get('name');
-        $sensor->topic=$request->get('topic');
-        $sensor->trigger=$trigger;
-        $sensor->current_command=$request->get('current_command');
-        $sensor->message_info=$request->get('message_info');
-        $sensor->message_ok=$request->get('message_ok');
-        $sensor->message_warn=$request->get('message_warn');
-        $sensor->type=$request->get('type');
-        $sensor->location=$request->get('location');
-        $sensor->notifying=$notifying;
-        $sensor->active=$active;
-        $sensor->save();
+        $model = new MqttSecure;
+        $model->updateSecureSensor($id, $request);
 
         return redirect('/secure')->with([
             'success' => 'Датчик системы безопасности обновлен!',
@@ -162,4 +128,5 @@ class SecureController extends Controller
         ]);
 
     }
+
 }

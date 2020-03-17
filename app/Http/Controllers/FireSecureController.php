@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DeviceLocation;
-use App\DeviceType;
 use App\MqttFireSecure;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -36,11 +34,9 @@ class FireSecureController extends Controller
      */
     public function create()
     {
-        $types = DeviceType::all()->pluck('name', 'id');
-        $locations = DeviceLocation::all()->pluck('name', 'id');
-        return view('crud.firesecure.create', [
-            'locations' => $locations,
-            'types' => $types,
+         return view('crud.firesecure.create', [
+            'locations' => self::locationsList(),
+            'types' => self::typesList(),
         ]);
     }
 
@@ -57,21 +53,8 @@ class FireSecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $notifying = ($request->get('notifying') == 'state') ? true : false;
-        $active    = ($request->get('active')    == 'state') ? true : false;
-        $sensor = new MqttFireSecure([
-            'name'=>$request->get('name'),
-            'topic'=>$request->get('topic'),
-            'message_info'=>$request->get('message_info'),
-            'message_ok'=>$request->get('message_ok'),
-            'message_warn'=>$request->get('message_warn'),
-            'type'=>$request->get('type'),
-            'location'=>$request->get('location'),
-            'notifying'=>$notifying,
-            'active'=>$active,
-        ]);
-
-        $sensor->save();
+        $model = new MqttFireSecure;
+        $model->storeFireSecureSensor($request);
 
         return redirect('/fire_secure')->with('success', 'Датчик противопожарной системы безопасности добавлен!');
     }
@@ -95,14 +78,12 @@ class FireSecureController extends Controller
      */
     public function edit($id)
     {
-        $types = DeviceType::all()->pluck('name', 'id');
-        $locations = DeviceLocation::all()->pluck('name', 'id');
         $sensor = MqttFireSecure::find($id);
 
         return view('crud.firesecure.edit', [
             'sensor' => $sensor,
-            'locations' => $locations,
-            'types' => $types,
+            'locations' => self::locationsList(),
+            'types' => self::typesList(),
         ]);
     }
 
@@ -120,20 +101,8 @@ class FireSecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $notifying = ($request->get('notifying') == 'state') ? true : false;
-        $active    = ($request->get('active')    == 'state') ? true : false;
-
-        $sensor = MqttFireSecure::find($id);
-        $sensor->name=$request->get('name');
-        $sensor->topic=$request->get('topic');
-        $sensor->message_info=$request->get('message_info');
-        $sensor->message_ok=$request->get('message_ok');
-        $sensor->message_warn=$request->get('message_warn');
-        $sensor->type=$request->get('type');
-        $sensor->location=$request->get('location');
-        $sensor->notifying=$notifying;
-        $sensor->active=$active;
-        $sensor->save();
+        $model = new MqttFireSecure;
+        $model->updateFireSecureSensor($id, $request);
 
         return redirect('/fire_secure')->with([
             'success' => 'Датчик противопожарной системы безопасности обновлен!',

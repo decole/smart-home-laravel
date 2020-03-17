@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Services\DataService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
 /**
  * App\MqttFireSecure
@@ -63,4 +65,51 @@ class MqttFireSecure extends Model
     {
         return $this->belongsTo(DeviceLocation::class, 'location');
     }
+
+    /**
+     * Update sensor
+     *
+     * @param $id
+     * @param \Illuminate\Http\Request $request
+     */
+    public function updateFireSecureSensor($id, \Illuminate\Http\Request $request)
+    {
+        $sensor = self::find($id);
+        $sensor = self::collecting($sensor, $request);
+        $sensor->save();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     */
+    public function storeFireSecureSensor(\Illuminate\Http\Request $request)
+    {
+        $sensor = new self();
+        $sensor = self::collecting($sensor, $request);
+        $sensor->save();
+    }
+
+    /**
+     * Вынос похожих рудиментов в отдельную функцию
+     *
+     * @param MqttFireSecure $sensor
+     * @param \Illuminate\Http\Request $request
+     * @return MqttFireSecure
+     */
+    protected function collecting(MqttFireSecure $sensor, \Illuminate\Http\Request $request)
+    {
+        $sensor->name         = $request->get('name');
+        $sensor->topic        = $request->get('topic');
+        $sensor->message_info = $request->get('message_info');
+        $sensor->message_ok   = $request->get('message_ok');
+        $sensor->message_warn = $request->get('message_warn');
+        $sensor->type         = $request->get('type');
+        $sensor->location     = $request->get('location');
+        $sensor->notifying    = DataService::getCheckboxValue('notifying', $request);
+        $sensor->active       = DataService::getCheckboxValue('active', $request);
+
+        return $sensor;
+
+    }
+
 }

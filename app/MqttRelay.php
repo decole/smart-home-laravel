@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Services\DataService;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -78,5 +79,59 @@ class MqttRelay extends Model
     public function devicelocation()
     {
         return $this->belongsTo(DeviceLocation::class, 'location');
+    }
+
+    /**
+     * Store relay
+     *
+     * @param \Illuminate\Http\Request $request
+     */
+    public function storeRelay(\Illuminate\Http\Request $request)
+    {
+        $sensor = new self();
+        $sensor = self::collecting($sensor, $request);
+        $sensor->save();
+    }
+
+    /**
+     * Update relay
+     *
+     * @param $id
+     * @param \Illuminate\Http\Request $request
+     */
+    public function updateRelay($id, \Illuminate\Http\Request $request)
+    {
+        $sensor = self::find($id);
+        $sensor = self::collecting($sensor, $request);
+        $sensor->save();
+    }
+
+    /**
+     * Вынос похожих рудиментов в отдельную функцию
+     *
+     * @param MqttFireSecure $sensor
+     * @param \Illuminate\Http\Request $request
+     * @return MqttRelay
+     */
+    protected function collecting(MqttRelay $sensor, \Illuminate\Http\Request $request)
+    {
+        $sensor->name              = $request->get('name');
+        $sensor->check_topic       = $request->get('check_topic');
+        $sensor->command_on        = $request->get('command_on');
+        $sensor->command_off       = $request->get('command_off');
+        $sensor->check_command_on  = $request->get('check_command_on');
+        $sensor->check_command_off = $request->get('check_command_off');
+        $sensor->last_command      = $request->get('last_command');
+        $sensor->topic             = $request->get('topic');
+        $sensor->message_info      = $request->get('message_info');
+        $sensor->message_ok        = $request->get('message_ok');
+        $sensor->message_warn      = $request->get('message_warn');
+        $sensor->type              = $request->get('type');
+        $sensor->location          = $request->get('location');
+        $sensor->notifying         = DataService::getCheckboxValue('notifying', $request);
+        $sensor->active            = DataService::getCheckboxValue('active', $request);
+
+        return $sensor;
+
     }
 }
