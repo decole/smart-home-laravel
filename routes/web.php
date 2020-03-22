@@ -35,3 +35,5 @@ Route::resource('/locations', 'DeviceLocationController');
 Route::resource('/secure', 'SecureController');
 
 Route::resource('/fire_secure', 'FireSecureController');
+
+Route::resource('/history_greenhouse', 'MqttHistoryController');
