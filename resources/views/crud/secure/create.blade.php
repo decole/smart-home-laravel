@@ -41,10 +41,17 @@
                                 <label for="topic">Тема (Topic):</label>
                                 <input type="text" class="form-control" name="topic" autocomplete="off" value="{{ old('topic') }}" />
                             </div>
-
                             <div class="form-group">
                                 <label for="topic">Взведен:</label>
                                 {{ Form::checkbox('trigger', 'state', true, ['class'=> 'form-control']) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="topic">normal_condition:</label>
+                                <input type="text" class="form-control" name="normal_condition" autocomplete="off" value="{{ old('normal_condition') }}" />
+                            </div>
+                            <div class="form-group">
+                                <label for="topic">alarm_condition:</label>
+                                <input type="text" class="form-control" name="alarm_condition" autocomplete="off" value="{{ old('alarm_condition') }}" />
                             </div>
                             <div class="form-group">
                                 <label for="topic">Текущая команда:</label>

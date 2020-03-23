@@ -47,6 +47,14 @@
                             {{ Form::checkbox('trigger', 'state', $sensor->trigger, ['class'=> 'form-control']) }}
                         </div>
                         <div class="form-group">
+                            <label for="topic">normal_condition:</label>
+                            <input type="text" class="form-control" name="normal_condition" autocomplete="off" value="{{ $sensor->normal_condition }}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="topic">alarm_condition:</label>
+                            <input type="text" class="form-control" name="alarm_condition" autocomplete="off" value="{{ $sensor->alarm_condition }}" />
+                        </div>
+                        <div class="form-group">
                             <label for="topic">Текущая команда:</label>
                             <input type="text" class="form-control" name="current_command" autocomplete="off" value="{{ $sensor->current_command }}" />
                         </div>

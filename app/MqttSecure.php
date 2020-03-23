@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $message_info
  * @property string|null $message_ok
  * @property string|null $message_warn
+ * @property string|null $normal_condition
+ * @property string|null $alarm_condition
  * @property int|null $type
  * @property int|null $location
  * @property bool|null $notifying
@@ -109,6 +111,8 @@ class MqttSecure extends Model
         $sensor->topic           = $request->get('topic');
         $sensor->current_command = $request->get('current_command');
         $sensor->trigger         = DataService::getCheckboxValue('trigger', $request);
+        $sensor->normal_condition= $request->get('normal_condition');
+        $sensor->alarm_condition = $request->get('alarm_condition');
         $sensor->message_info    = $request->get('message_info');
         $sensor->message_ok      = $request->get('message_ok');
         $sensor->message_warn    = $request->get('message_warn');

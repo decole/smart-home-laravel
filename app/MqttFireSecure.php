@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Request;
  * @property string|null $message_info
  * @property string|null $message_ok
  * @property string|null $message_warn
+ * @property string|null $normal_condition
+ * @property string|null $alarm_condition
  * @property int|null $type
  * @property int|null $location
  * @property bool|null $notifying
@@ -105,6 +107,8 @@ class MqttFireSecure extends Model
         $sensor->message_warn = $request->get('message_warn');
         $sensor->type         = $request->get('type');
         $sensor->location     = $request->get('location');
+        $sensor->normal_condition    = $request->get('normal_condition');
+        $sensor->alarm_condition     = $request->get('alarm_condition');
         $sensor->notifying    = DataService::getCheckboxValue('notifying', $request);
         $sensor->active       = DataService::getCheckboxValue('active', $request);
 

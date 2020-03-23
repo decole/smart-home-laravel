@@ -37,10 +37,17 @@
                                 <label for="name">Название:</label>
                                 <input type="text" class="form-control" name="name" autocomplete="off" value="{{ old('name') }}" />
                             </div>
-
                             <div class="form-group">
                                 <label for="topic">Тема (Topic):</label>
                                 <input type="text" class="form-control" name="topic" autocomplete="off" value="{{ old('topic') }}" />
+                            </div>
+                            <div class="form-group">
+                                <label for="topic">занчение от:</label>
+                                <input type="text" class="form-control" name="from_condition" autocomplete="off" value="{{ old('from_condition') }}" />
+                            </div>
+                            <div class="form-group">
+                                <label for="topic">занчение до:</label>
+                                <input type="text" class="form-control" name="to_condition" autocomplete="off" value="{{ old('to_condition') }}" />
                             </div>
                             <div class="form-group">
                                 <label for="message_info">Текст информации о датчике:</label>

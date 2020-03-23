@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $message_warn
  * @property int $type
  * @property int $location
+ * @property int $to_condition
+ * @property int $from_condition
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereCreatedAt($value)
@@ -84,6 +86,7 @@ class MqttSensor extends Model
      */
     protected function collecting(MqttSensor $sensor, \Illuminate\Http\Request $request)
     {
+        /** @var MqttSensor $sensor */
         $sensor->name         = $request->get('name');
         $sensor->topic        = $request->get('topic');
         $sensor->message_info = $request->get('message_info');
@@ -91,6 +94,8 @@ class MqttSensor extends Model
         $sensor->message_warn = $request->get('message_warn');
         $sensor->type         = $request->get('type');
         $sensor->location     = $request->get('location');
+        $sensor->from_condition = $request->get('from_condition');
+        $sensor->to_condition   = $request->get('to_condition');
         //$sensor->notifying    = DataService::getCheckboxValue('notifying', $request);
         //$sensor->active       = DataService::getCheckboxValue('active', $request);
 

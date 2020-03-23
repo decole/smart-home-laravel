@@ -1,8 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\MqttFireSecure;
 use App\MqttHistory;
 use App\MqttRelay;
+use App\MqttSecure;
 use App\MqttSensor;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -185,6 +187,16 @@ final class MqttService
             $list = array_merge($model->pluck('topic')->toArray(),$model->pluck('check_topic')->toArray());
         }
 
+        if ($string == 'fire_secure') {
+            $model = MqttFireSecure::all();
+            $list = $model->pluck('topic')->toArray();
+        }
+
+        if ($string == 'secure') {
+            $model = MqttSecure::all();
+            $list = $model->pluck('topic')->toArray();
+        }
+
         Cache::forget($string.'_list_models');
         Cache::forget($string.'_list_topics');
         self::setCacheLong($string.'_list_models', $model->toArray());
@@ -192,15 +204,44 @@ final class MqttService
         return $list;
     }
 
+    /**
+     * sensors_list_topics - кэшированный список топиков
+     * sensors_list_models - кэшированный массив объектов моделей топиков
+     *
+     * @param $message
+     * @return bool
+     */
+    private static function analiseSensors($message)
+    {
+        $sensors_list = self::getCacheMqtt('sensors_list_topics');
+        if ($sensors_list === null) {
+            $sensors_list = self::createDataset('sensors');
+        }
+        if (in_array($message->topic, $sensors_list)) {
+            $model = self::getCacheMqtt('sensors_list_models');
+            foreach ($model as $value) {
+                if($value['topic'] == $message->topic) {
+                    if (
+                        ( $value['from_condition'] && (integer) $message->payload < (integer) $value['from_condition'] ) ||
+                        ( $value['to_condition']   && (integer) $message->payload > (integer) $value['to_condition']   )
+                    ) {
+                        // @Todo add to notification
+                    }
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    }
+
     private static function analiseRelays($message)
     {
-        self::deleteCacheMqtt('relays_list_models');
-        self::deleteCacheMqtt('relays_list_topics');
         $sensors_list = self::getCacheMqtt('relays_list_topics');
         if ($sensors_list === null) {
             $sensors_list = self::createDataset('relays');
         }
-
         if (in_array($message->topic, $sensors_list)) {
             $model = self::getCacheMqtt('relays_list_models');
             foreach ($model as $value) {
@@ -241,93 +282,59 @@ final class MqttService
                 }
             }
         }
+
         return false;
+
     }
 
     private static function analiseFireSecures($message)
     {
-        // При изменении состояния датчика на сработку, отправить сообщения по каналам нотификаций
-        /* Добавить в таблицу колонки, значение норма и значение пожар, чтобы иметь понятия как различать состояния датчиков
-        self::deleteCacheMqtt('sensors_list_models');
-        self::deleteCacheMqtt('sensors_list_topics');
-        $sensors_list = self::getCacheMqtt('sensors_list_topics');
+        $sensors_list = self::getCacheMqtt('fire_secure_list_topics');
         if ($sensors_list === null) {
-            $sensors_list = self::createDataset('sensors');
+            $sensors_list = self::createDataset('fire_secure');
         }
-
         if (in_array($message->topic, $sensors_list)) {
-            $model = self::getCacheMqtt('sensors_list_models');
+            $model = self::getCacheMqtt('fire_secure_list_models');
             foreach ($model as $value) {
                 if ($value['topic'] == $message->topic) {
-                    echo 'find relay ' . $value['name'];
+                    if($value['alarm_condition'] == $message->payload) {
+                        // @Todo notify При изменении состояния датчика на сработку, отправить сообщения по каналам нотификаций
+                    }
                     return true;
                 }
             }
         }
-        */
+
         return false;
+
     }
 
     private static function analiseSecures($message)
     {
-        // При изменении состояния датчика на сработку, отправить сообщения по каналам нотификаций
-        /*
-        self::deleteCacheMqtt('sensors_list_models');
-        self::deleteCacheMqtt('sensors_list_topics');
-        $sensors_list = self::getCacheMqtt('sensors_list_topics');
+        self::createDataset('secure');
+        $sensors_list = self::getCacheMqtt('secure_list_topics');
         if ($sensors_list === null) {
-            $sensors_list = self::createDataset('sensors');
+            $sensors_list = self::createDataset('secure');
         }
-
         if (in_array($message->topic, $sensors_list)) {
-            $model = self::getCacheMqtt('sensors_list_models');
+            $model = self::getCacheMqtt('secure_list_models');
             foreach ($model as $value) {
                 if ($value['topic'] == $message->topic) {
-                    echo 'find relay ' . $value['name'];
+                    if(
+                        ( (integer) $value['alarm_condition'] == (integer) $message->payload ) &&
+                        $value['trigger'] == true
+                    ) {
+                        // @Todo При изменении состояния датчика на сработку, отправить сообщения по каналам нотификаций
+                    }
                     return true;
                 }
             }
         }
-        */
-        return false;
-    }
-
-    /**
-     * sensors_list_topics - кэшированный список топиков
-     * sensors_list_models - кэшированный массив объектов моделей топиков
-     *
-     * @param $message
-     * @return bool
-     */
-    private static function analiseSensors($message)
-    {
-        self::deleteCacheMqtt('sensors_list_models');
-        self::deleteCacheMqtt('sensors_list_topics');
-        $sensors_list = self::getCacheMqtt('sensors_list_topics');
-        if ($sensors_list === null) {
-            $sensors_list = self::createDataset('sensors');
-        }
-
-        if (in_array($message->topic, $sensors_list)) {
-            $model = self::getCacheMqtt('sensors_list_models');
-            foreach ($model as $value) {
-                if($value['topic'] == $message->topic) {
-                    //echo 'find '. $value['topic'].PHP_EOL;
-//                    if ($value['from_condition'] && $value['rom_condition'] < $message->payload) {
-                    //echo 'warning from_condition, ' . $message->payload;
-                    // @Todo add to notification
-//                    }
-//                    if ($value['to_condition'] && $value['to_condition'] > $message->payload) {
-                    //echo 'warning to_condition, ' . $message->payload;
-                    // @Todo add to notification
-//                    }
-                    return true;
-                }
-            }
-            //var_dump($model);
-        }
 
         return false;
+
     }
-    
+
+
+
 }

@@ -42,6 +42,14 @@
                                 <input type="text" class="form-control" name="topic" autocomplete="off" value="{{ $sensor->topic }}" />
                             </div>
                             <div class="form-group">
+                                <label for="topic">normal_condition:</label>
+                                <input type="text" class="form-control" name="normal_condition" autocomplete="off" value="{{ $sensor->normal_condition }}" />
+                            </div>
+                            <div class="form-group">
+                                <label for="topic">alarm_condition:</label>
+                                <input type="text" class="form-control" name="alarm_condition" autocomplete="off" value="{{ $sensor->alarm_condition }}" />
+                            </div>
+                            <div class="form-group">
                                 <label for="message_info">Текст информации о датчике:</label>
                                 <input type="text" class="form-control" name="message_info" autocomplete="off" value="{{ $sensor->message_info }}" />
                             </div>
