@@ -68,10 +68,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('all-data') }}" class="nav-link">
                         <i class="fas fa-folder-open"></i>
                         <p>
                             All data
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('margulis') }}" class="nav-link">
+                        <i class="fas fa-folder-open"></i>
+                        <p>
+                            Пристройка
                         </p>
                     </a>
                 </li>

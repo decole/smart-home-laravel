@@ -1,13 +1,16 @@
 <?php
 namespace App\Services;
 
+use App\Mail\UserSendEmail;
 use App\MqttFireSecure;
 use App\MqttHistory;
 use App\MqttRelay;
 use App\MqttSecure;
 use App\MqttSensor;
+use App\Services\DataService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use App\Jobs\SendEmail;
 
 final class MqttService
 {
@@ -38,6 +41,10 @@ final class MqttService
         });
         register_shutdown_function([$this, 'disconnect']);
 
+        self::createDataset('sensors');
+        self::createDataset('relays');
+        self::createDataset('secure');
+        self::createDataset('fire_secure');
     }
 
     public function listen()
@@ -45,7 +52,7 @@ final class MqttService
         $this->client->subscribe('#', 1);
         $this->client->onMessage([$this, 'process']);
         while(true) {
-            $this->client->loop(10);
+            $this->client->loop(5);
         }
 
     }
@@ -68,6 +75,8 @@ final class MqttService
      * @return bool|void
      */
     public function process($message){
+        self::setCacheMqtt($message->topic, $message->payload);
+
         if ($message->topic == 'greenhouse/temperature') {
             self::saveDB($message);
             return true;
@@ -78,6 +87,7 @@ final class MqttService
         if (self::analiseSecures($message)) {
             return true;
         }
+
         if (self::analiseFireSecures($message)) {
             return true;
         }
@@ -186,17 +196,14 @@ final class MqttService
             $model = MqttRelay::all();
             $list = array_merge($model->pluck('topic')->toArray(),$model->pluck('check_topic')->toArray());
         }
-
         if ($string == 'fire_secure') {
             $model = MqttFireSecure::all();
             $list = $model->pluck('topic')->toArray();
         }
-
         if ($string == 'secure') {
             $model = MqttSecure::all();
             $list = $model->pluck('topic')->toArray();
         }
-
         Cache::forget($string.'_list_models');
         Cache::forget($string.'_list_topics');
         self::setCacheLong($string.'_list_models', $model->toArray());
@@ -225,11 +232,12 @@ final class MqttService
                         ( $value['from_condition'] && (integer) $message->payload < (integer) $value['from_condition'] ) ||
                         ( $value['to_condition']   && (integer) $message->payload > (integer) $value['to_condition']   )
                     ) {
-                        // @Todo add to notification
+                        self::sendNotify($value['message_warn'], $message->payload);
                     }
                     return true;
                 }
             }
+            return true;
         }
 
         return false;
@@ -246,8 +254,10 @@ final class MqttService
             $model = self::getCacheMqtt('relays_list_models');
             foreach ($model as $value) {
                 if ($value['check_topic'] == $message->topic) {
+                    if ($value['active'] == false) {
+                        return true;
+                    }
                     if (
-                        empty($value['last_command']) ||
                         $value['last_command'] != self::decodeRequestRelay($message->payload)
                     ) {
                         /** @var MqttRelay $relay */
@@ -255,20 +265,18 @@ final class MqttService
                         $relay->last_command = self::decodeRequestRelay($message->payload);
                         $relay->save();
                         self::createDataset('relays');
+                        if (self::is_active($value)) {
+                            self::sendNotify($value['message_warn'], $relay->last_command);
+                        }
                     }
-
-                    if ($value['last_command'] != 'on' || $value['last_command'] != 'off'){
-                        $relay = MqttRelay::where('check_topic', $message->topic)->first();
-                        $relay->last_command = 'off';
-                        $relay->save();
-                        self::createDataset('relays');
-                    }
-                    // @Todo отправить нотификацию о неправильной команде, не on/off
                     return true;
                 }
             }
             foreach ($model as $value) {
                 if ($value['topic'] == $message->topic) {
+                    if ($value['active'] == false) {
+                        return true;
+                    }
                     $payload = $message->payload;
                     if($value['command_on'] == $payload || $value['command_off'] == $payload) {
                         /** @var MqttRelay $relay */
@@ -278,9 +286,11 @@ final class MqttService
                         self::createDataset('relays');
                         return true;
                     }
-                    return true;
                 }
             }
+
+            return true;
+
         }
 
         return false;
@@ -298,7 +308,8 @@ final class MqttService
             foreach ($model as $value) {
                 if ($value['topic'] == $message->topic) {
                     if($value['alarm_condition'] == $message->payload) {
-                        // @Todo notify При изменении состояния датчика на сработку, отправить сообщения по каналам нотификаций
+                        // @Todo telegram notify
+                        self::sendNotify($value['message_warn'], $message->payload);
                     }
                     return true;
                 }
@@ -311,7 +322,6 @@ final class MqttService
 
     private static function analiseSecures($message)
     {
-        self::createDataset('secure');
         $sensors_list = self::getCacheMqtt('secure_list_topics');
         if ($sensors_list === null) {
             $sensors_list = self::createDataset('secure');
@@ -321,20 +331,45 @@ final class MqttService
             foreach ($model as $value) {
                 if ($value['topic'] == $message->topic) {
                     if(
-                        ( (integer) $value['alarm_condition'] == (integer) $message->payload ) &&
-                        $value['trigger'] == true
+                        (integer) $value['alarm_condition'] == (integer) $message->payload &&
+                        $value['trigger'] == true &&
+                        self::is_active($value)
                     ) {
-                        // @Todo При изменении состояния датчика на сработку, отправить сообщения по каналам нотификаций
+                        if ($value['notifying'] == true) {
+                            self::sendNotify($value['message_warn'], $message->payload);
+                        }
                     }
-                    return true;
+
+
                 }
             }
+            return true;
         }
 
         return false;
 
     }
 
+    /**
+     * Отправка на почту сообщений с сайта
+     * @param $string
+     * @param $payload
+     */
+    private static function sendNotify($string, $payload)
+    {
+        $text = DataService::getTextNotify($string,$payload);
+        echo $text . PHP_EOL;
+        /*
+        SendEmail::dispatch($text);
+        */
+    }
 
+    private static function is_active($value)
+    {
+        if ($value['active'] == false) {
+            return false;
+        }
+        return true;
+    }
 
 }

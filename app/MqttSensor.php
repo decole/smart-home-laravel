@@ -38,6 +38,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\DeviceLocation|null $devicelocation
  * @property-read \App\DeviceType|null $devicetype
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereFromCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSensor whereToCondition($value)
  */
 class MqttSensor extends Model
 {

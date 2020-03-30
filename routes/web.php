@@ -24,6 +24,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/margulis', 'HomeController@margulis')->name('margulis');
+
+Route::get('/all-data', 'HomeController@allData')->name('all-data');
+
 Route::resource('/sensors', 'MqttSensorController');
 
 Route::resource('/relays', 'MqttRelayController');

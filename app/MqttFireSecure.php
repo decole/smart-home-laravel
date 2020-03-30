@@ -41,6 +41,8 @@ use Illuminate\Support\Facades\Request;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttFireSecure whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttFireSecure whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttFireSecure whereAlarmCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttFireSecure whereNormalCondition($value)
  */
 class MqttFireSecure extends Model
 {

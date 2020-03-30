@@ -9,6 +9,7 @@
     <section class="content">
         <div class="container-fluid">
     <div class="row">
+
         <!-- Left col -->
         <section class="col-lg-7 connectedSortable">
 
@@ -139,12 +140,14 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
+                    {{ $success }}
                     <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>
                 </div>
             </div>
             <!-- /.card -->
         </section>
         <!-- /.Left col -->
+
     </div>
 
 @endsection

@@ -44,6 +44,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSecure whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSecure whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSecure whereAlarmCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\MqttSecure whereNormalCondition($value)
  */
 class MqttSecure extends Model
 {

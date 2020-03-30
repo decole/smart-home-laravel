@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\MqttRelay;
+use App\MqttSensor;
+use App\Notifications\UserNotify;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class HomeController extends Controller
 {
@@ -23,8 +28,42 @@ class HomeController extends Controller
      */
     public function index()
     {
+//        $comment = 'Это сообщение отправлено из формы обратной связи';
+        //Notification::send(Auth::user(), new UserNotify($comment));
+
         return view('index', [
-            'error' => null,
+            'success' => Auth::user()->email,
+        ]);
+
+    }
+
+    /**
+     * Show margulis room
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function margulis()
+    {
+        return view('page.margulis', [
+            'relays' => MqttRelay::where('topic', 'margulis/lamp01')->first(),
+            'sensors' => MqttSensor::where('topic', 'margulis/temperature')
+                ->orWhere('topic', 'margulis/humidity')
+                ->orderBy('id')
+                ->get(),
         ]);
     }
+
+    /**
+     * Show all data sensors and relays
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function allData()
+    {
+        return view('page.all_data', [
+            'relays' => MqttRelay::where('active', 'true')->get(),//MqttRelay::all(),
+            'sensors' => MqttSensor::all(),
+        ]);
+    }
+
 }
