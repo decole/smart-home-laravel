@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MqttHistory;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -20,7 +21,9 @@ class MqttHistoryController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(50);
 
-        return view('crud.payload_history.index', compact('sensors'));
+
+
+        return view('crud.payload_history.index', compact(['sensors']));
     }
 
     /**
@@ -88,4 +91,30 @@ class MqttHistoryController extends Controller
     {
         //
     }
+
+    public function get()
+    {
+        $now = Carbon::today();
+        $nameDB = MqttHistory::where('topic', '=', 'greenhouse/temperature')
+            ->whereDay('created_at', $now)->get();
+        $name = [];
+        foreach ($nameDB as $valuen) {
+            $name[] = $valuen['created_at']->format('d-m-Y');
+        }
+
+        $datasetDB = MqttHistory::where('topic', '=', 'greenhouse/temperature')
+            ->whereDay('created_at', $now)->get();
+        $dataset = [];
+        foreach ($datasetDB as $valued) {
+            $dataset[] = intval($valued['payload']);
+        }
+
+        return response()->json([
+            'label' => $name,
+            'data' => $dataset
+        ]);
+
+
+    }
+
 }

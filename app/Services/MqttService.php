@@ -358,12 +358,16 @@ final class MqttService
     private static function sendNotify($string, $payload)
     {
         $text = DataService::getTextNotify($string,$payload);
-        echo $text . PHP_EOL;
-        /*
+//        echo $text . PHP_EOL;
         SendEmail::dispatch($text);
-        */
     }
 
+    /**
+     * Проверка активности топиков из БД
+     *
+     * @param $value
+     * @return bool
+     */
     private static function is_active($value)
     {
         if ($value['active'] == false) {

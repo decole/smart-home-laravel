@@ -27,3 +27,7 @@ Route::prefix('/mqtt')->group(function () {
     Route::post('/post', 'Api\MqttApi@post');
 
 });
+
+Route::any('/alice', 'AliceController@index');
+
+Route::any('/greenhouse', 'MqttHistoryController@get');
