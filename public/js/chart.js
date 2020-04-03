@@ -1,22 +1,23 @@
 $(document).ready(function() {
-    $(document).ready(function() {
+    var areaChart;
+    function getVal(date) {
         // Get context with jQuery - using jQuery's .get() method.
-        $.get("/api/greenhouse", function (data) {
+        $.get("/api/greenhouse?date="+date, function (data) {
+
             let areaChartCanvas = $('#areaChart').get(0).getContext('2d');
-            console.log(data);
             var areaChartData = {
-                labels  : data['label'],
+                labels: data['label'],
                 datasets: [
                     {
-                        label               : 'Digital Goods',
-                        backgroundColor     : 'rgba(60,141,188,0.9)',
-                        borderColor         : 'rgba(60,141,188,0.8)',
-                        pointRadius         : false,
-                        pointColor          : '#3b8bba',
-                        pointStrokeColor    : 'rgba(60,141,188,1)',
-                        pointHighlightFill  : '#fff',
+                        label: 'Digital Goods',
+                        backgroundColor: 'rgba(60,141,188,0.9)',
+                        borderColor: 'rgba(60,141,188,0.8)',
+                        pointRadius: false,
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
                         pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data                : data['data']
+                        data: data['data']
                     },
                     // {
                     //     label               : 'Electronics',
@@ -32,46 +33,55 @@ $(document).ready(function() {
                 ]
             };
             let areaChartOptions = {
-                maintainAspectRatio : false,
-                responsive : true,
+                maintainAspectRatio: false,
+                responsive: true,
                 legend: {
                     display: false
                 },
                 scales: {
                     xAxes: [{
-                        gridLines : {
-                            display : false,
+                        gridLines: {
+                            display: false,
                         }
                     }],
                     yAxes: [{
-                        gridLines : {
-                            display : false,
+                        gridLines: {
+                            display: false,
                         }
                     }]
                 }
             };
 
             // This will get the first returned node in the jQuery collection.
-            let areaChart       = new Chart(areaChartCanvas, {
+            areaChart = new Chart(areaChartCanvas, {
                 type: 'line',
                 data: areaChartData,
                 options: areaChartOptions
             });
         });
+    }
 
-    });
+    function solum(el,day) {
+        let root = $(el).parent().parent().parent().parent();
+        let topic = root.data("topic");
+        let select_date = $(el).parent().parent().find('.chart-date-marker').text();
+        let new_day = moment(select_date, "DD-MM-YYYY").add(day, 'days').format('DD-MM-YYYY');
+        $(el).parent().parent().find('.chart-date-marker').text(new_day);
+        return new_day;
+    }
 
     $( ".chart-pagination-previous" ).on( "click", function() {
-        let root = $( this ).parent().parent().parent().parent();
-        let topic = root.data("topic");
-        let select_date = $( this ).parent().parent().find('.chart-date-marker').text();
-        console.log( select_date );
+        areaChart.destroy();
+        getVal(solum(this,-1));
     });
 
     $( ".chart-pagination-next" ).on( "click", function() {
-        let root = $( this ).parent().parent().parent().parent();
-        let topic = root.data("topic");
-        let select_date = $( this ).parent().parent().find('.chart-date-marker').text();
-        console.log( select_date );
+        areaChart.destroy();
+        getVal(solum(this,1));
     });
+
+    getVal($('.chart-date-marker').text());
+
 });
+
+

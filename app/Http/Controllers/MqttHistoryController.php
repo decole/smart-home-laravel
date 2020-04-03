@@ -17,13 +17,13 @@ class MqttHistoryController extends Controller
      */
     public function index()
     {
-        $sensors = MqttHistory::where('topic', '=', 'greenhouse/temperature')
+        $topic = 'greenhouse/temperature';
+        $sensors = MqttHistory::where('topic', '=', $topic)
             ->orderBy('id', 'desc')
             ->paginate(50);
 
+        return view('crud.payload_history.index', compact(['sensors', 'topic']));
 
-
-        return view('crud.payload_history.index', compact(['sensors']));
     }
 
     /**
@@ -92,9 +92,16 @@ class MqttHistoryController extends Controller
         //
     }
 
-    public function get()
+    public function get(Request $request)
     {
-        $now = Carbon::today();
+        $now = $request->get('date');
+        if (!$now){
+            $now = Carbon::today();
+        }
+        if ($now) {
+            $now = Carbon::createFromFormat('d-m-Y', $now);
+        }
+
         $nameDB = MqttHistory::where('topic', '=', 'greenhouse/temperature')
             ->whereDay('created_at', $now)->get();
         $name = [];
@@ -113,7 +120,6 @@ class MqttHistoryController extends Controller
             'label' => $name,
             'data' => $dataset
         ]);
-
 
     }
 
