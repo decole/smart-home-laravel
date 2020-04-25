@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 //use App\Helpers\TelegramHelper;
+use App\Services\TelegramService;
 use Illuminate\Console\Command;
 
 class telegram_send_decole extends Command
@@ -39,10 +40,9 @@ class telegram_send_decole extends Command
      */
     public function handle()
     {
-        /*
-        $telegram = new TelegramHelper();
+        $telegram = new TelegramService();
         $message = $this->argument('message');
+        $this->info($message);
         $telegram->sendDecole($message);
-        */
     }
 }

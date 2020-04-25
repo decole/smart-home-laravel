@@ -66,4 +66,39 @@ class HomeController extends Controller
         ]);
     }
 
+    public function secure()
+    {
+        return view('page.secure');
+    }
+
+    public function firesecure()
+    {
+        return view('page.firesecure');
+    }
+
+    public function watering()
+    {
+        return view('page.autowattering');
+    }
+
+    public function settings()
+    {
+        return view('page.settings');
+    }
+
+    public function contacts()
+    {
+        return view('page.contacts');
+    }
+
+    public function notifications()
+    {
+        return view('page.notifications');
+    }
+
+    public function messages()
+    {
+        return view('page.messages');
+    }
+
 }

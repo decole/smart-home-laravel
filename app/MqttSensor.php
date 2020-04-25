@@ -65,17 +65,17 @@ class MqttSensor extends Model
         return $this->belongsTo(DeviceLocation::class, 'location');
     }
 
-    public function storeSensor(\Illuminate\Http\Request $request)
+    public static function storeSensor(\Illuminate\Http\Request $request)
     {
         $sensor = new self();
-        $sensor = self::collecting($sensor, $request);
+        $sensor->collecting($sensor, $request);
         $sensor->save();
     }
 
-    public function updateSensor(int $id, \Illuminate\Http\Request $request)
+    public static function updateSensor(int $id, \Illuminate\Http\Request $request)
     {
         $sensor = self::find($id);
-        $sensor = self::collecting($sensor, $request);
+        $sensor->collecting($sensor, $request);
         $sensor->save();
     }
 

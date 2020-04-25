@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MqttSensor;
+use App\Services\MqttService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -56,8 +57,8 @@ class MqttSensorController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttSensor;
-        $model->storeSensor($request);
+        MqttSensor::storeSensor($request);
+        MqttService::createDataset('sensors');
 
         return redirect('/sensors')->with('success', 'Датчик сохранен!');
 
@@ -106,8 +107,8 @@ class MqttSensorController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttSensor;
-        $model->updateSensor($id, $request);
+        MqttSensor::updateSensor($id, $request);
+        MqttService::createDataset('sensors');
 
         return redirect('/sensors')->with([
             'success' => 'Датчик обновлен!',
@@ -126,6 +127,7 @@ class MqttSensorController extends Controller
     {
         $contact = MqttSensor::find($id);
         $contact->delete();
+        MqttService::createDataset('sensors');
 
         return redirect('/sensors')->with([
             'success' => 'Датчик удален!',

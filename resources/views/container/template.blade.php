@@ -9,7 +9,7 @@
     <link rel="icon" href="{{ asset("favicon.png") }}" sizes="192x192" />
     <link rel="apple-touch-icon-precomposed" href="{{ asset("favicon.png") }}" />
     <meta name="msapplication-TileImage" content="{{ asset("favicon.png") }}" />
-    <title>{{ config('app.name', 'Laravel') }} | @yield('title')</title>
+    <title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @section('head')
     <!-- Tell the browser to be responsive to screen width -->

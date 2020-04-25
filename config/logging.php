@@ -35,6 +35,12 @@ return [
     */
 
     'channels' => [
+        'telegramBot' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/telegram-bot.log'),
+            'level' => 'debug',
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
@@ -51,7 +57,8 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
-            'days' => 14,
+            'days' => 1,
+            'permission' => 0777,
         ],
 
         'slack' => [

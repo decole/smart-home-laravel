@@ -9,10 +9,10 @@
             <a href="/" class="nav-link">Главная</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Контакты</a>
+            <a href="{{ route('contacts') }}" class="nav-link">Контакты</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Настройки</a>
+            <a href="{{ route('settings') }}" class="nav-link">Настройки</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="/logout" class="nav-link">Выход</a>
@@ -88,7 +88,7 @@
                     <!-- Message End -->
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                <a href="{{ route('messages') }}" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
         </li>
         <!-- Notifications Dropdown Menu -->
@@ -115,7 +115,7 @@
                     <span class="float-right text-muted text-sm">2 days</span>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                <a href="{{ route('notifications.index') }}" class="dropdown-item dropdown-footer">See All Notifications</a>
             </div>
         </li>
         {{--<li class="nav-item">--}}

@@ -71,25 +71,25 @@ class MqttFireSecure extends Model
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     */
+    public static function storeFireSecureSensor(\Illuminate\Http\Request $request)
+    {
+        $sensor = new self();
+        $sensor->collecting($sensor, $request);
+        $sensor->save();
+    }
+
+    /**
      * Update sensor
      *
      * @param $id
      * @param \Illuminate\Http\Request $request
      */
-    public function updateFireSecureSensor($id, \Illuminate\Http\Request $request)
+    public static function updateFireSecureSensor($id, \Illuminate\Http\Request $request)
     {
         $sensor = self::find($id);
-        $sensor = self::collecting($sensor, $request);
-        $sensor->save();
-    }
-
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
-    public function storeFireSecureSensor(\Illuminate\Http\Request $request)
-    {
-        $sensor = new self();
-        $sensor = self::collecting($sensor, $request);
+        $sensor->collecting($sensor, $request);
         $sensor->save();
     }
 

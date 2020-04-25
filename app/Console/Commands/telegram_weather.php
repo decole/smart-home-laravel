@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 //use App\Helpers\TelegramHelper;
+use App\Services\TelegramService;
 use App\Weather;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,8 @@ class telegram_weather extends Command
     protected $description = 'telegram messenger functions';
 
     private $api;
+    private $temp;
+    private $weather_spec;
 
     /**
      * Create a new command instance.
@@ -41,7 +44,9 @@ class telegram_weather extends Command
     public function __construct()
     {
         parent::__construct();
-        //$this->api = new TelegramHelper();
+        $this->api = new TelegramService();
+        $this->temp         = null;
+        $this->weather_spec = null;
     }
 
     /**
@@ -52,14 +57,13 @@ class telegram_weather extends Command
      */
     public function handle()
     {
-        /*
+
         /** @var Weather $acuw */
-        /*
+
         $string = 'Сейчас ' . $this->getRusDay() . date(" d ") . $this->getRusMonth() . PHP_EOL;
-        $acuweth = $this->getAcuweather();
-        $string .= 'Температура ' . $acuweth->temperature . ' С`- ' . $acuweth->spec;
+        $this->getAcuweather();
+        $string .= 'Температура ' . $this->temp . ' С`- ' . $this->weather_spec;
         $this->api->sendDecole($string);
-        */
     }
 
     protected function getRusDay()
@@ -108,7 +112,24 @@ class telegram_weather extends Command
      */
     protected function getAcuweather()
     {
-        return DB::table('weather')->orderBy('date' , 'desc')->first();
+        $page    = file_get_contents( 'http://apidev.accuweather.com/currentconditions/v1/291309.json?language=ru-ru&apikey=hoArfRosT1215' );
+        $decoded = json_decode( $page, true );
+        if ( is_array( $decoded ) ) {
+            if ( ! empty( $decoded[0]['Temperature']['Metric']['Value'] ) ) {
+                $this->temp = $decoded[0]['Temperature']['Metric']['Value'];
+                $this->weather_spec = $decoded[0]['WeatherText'];
+                return true;
+            }
+        }
+        /** @var Weather $model */
+        $model = Weather::latest()->first();
+        if ($model) {
+            $this->temp = $model->temperature.'_from_db';
+            $this->weather_spec = $model->spec.'_from_db';
+            return true;
+        }
+        $this->temp = 'not extracted';
+        $this->weather_spec = 'not extracted';
     }
 
 }

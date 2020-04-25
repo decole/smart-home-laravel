@@ -20,13 +20,13 @@
                 @endif
             </div>
             <div class="info">
-                <a href="#" class="d-block">
-                    @if(!empty(Auth::user()->name))
-                    {{ Auth::user()->name }}
-                    @else
-                        <a href="/login">Авторизируйтесь</a>
-                    @endif
-                </a>
+                @if(!empty(Auth::user()->name))
+                    <a href="{{ route('settings') }}" class="d-block">
+                        {{ Auth::user()->name }}
+                    </a>
+                @else
+                    <a href="/login" class="d-block">Авторизируйтесь</a>
+                @endif
             </div>
         </div>
 
@@ -36,34 +36,34 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('settings') }}" class="nav-link">
                         <i class="fas fa-cogs"></i>
                         <p>
-                            Settings
+                            Настройки
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-tint"></i></i>
+                    <a href="{{ route('watering') }}" class="nav-link">
+                        <i class="fas fa-tint" style="padding: 4px;"></i>
                         <p>
-                            Wattering
+                            Автополив
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('fire_secure') }}" class="nav-link">
                         <i class="fab fa-free-code-camp"></i>
                         <p>
-                            FireSecurity
+                            Пожарная система
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('secure_system') }}" class="nav-link">
                         <i class="fas fa-user-lock"></i>
                         <p>
-                            Security
+                            Охранная система
                         </p>
                     </a>
                 </li>
@@ -71,7 +71,7 @@
                     <a href="{{ route('all-data') }}" class="nav-link">
                         <i class="fas fa-folder-open"></i>
                         <p>
-                            All data
+                            Все данные
                         </p>
                     </a>
                 </li>
@@ -92,11 +92,11 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview ">
+                    <a class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>
-                            CRUD
+                            Параметры
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -105,7 +105,7 @@
                             <a href="{{ route('sensors.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
-                                    Sensors
+                                    Сенсоры
                                 </p>
                             </a>
                         </li>
@@ -113,7 +113,7 @@
                             <a href="{{ route('relays.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
-                                    Relays
+                                    Реле
                                 </p>
                             </a>
                         </li>
@@ -121,7 +121,7 @@
                             <a href="{{ route('types.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
-                                    Type Devices
+                                    Типы устройств
                                 </p>
                             </a>
                         </li>
@@ -129,7 +129,7 @@
                             <a href="{{ route('locations.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
-                                    Location Devices
+                                    Место устройств
                                 </p>
                             </a>
                         </li>
@@ -137,7 +137,7 @@
                             <a href="{{ route('secure.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
-                                    Secure Devices
+                                    Охранные датчики
                                 </p>
                             </a>
                         </li>
@@ -145,7 +145,15 @@
                             <a href="{{ route('fire_secure.index') }}" class="nav-link">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <p>
-                                    FireSecure Devices
+                                    Пожарные датчики
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('scheduler.index') }}" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Планировщик
                                 </p>
                             </a>
                         </li>

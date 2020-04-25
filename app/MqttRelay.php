@@ -86,10 +86,10 @@ class MqttRelay extends Model
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function storeRelay(\Illuminate\Http\Request $request)
+    public static function storeRelay(\Illuminate\Http\Request $request)
     {
         $sensor = new self();
-        $sensor = self::collecting($sensor, $request);
+        $sensor->collecting($sensor, $request);
         $sensor->save();
     }
 
@@ -99,10 +99,10 @@ class MqttRelay extends Model
      * @param $id
      * @param \Illuminate\Http\Request $request
      */
-    public function updateRelay($id, \Illuminate\Http\Request $request)
+    public static function updateRelay($id, \Illuminate\Http\Request $request)
     {
         $sensor = self::find($id);
-        $sensor = self::collecting($sensor, $request);
+        $sensor->collecting($sensor, $request);
         $sensor->save();
     }
 

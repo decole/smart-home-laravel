@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 //use App\Weather;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use function GuzzleHttp\Promise\all;
 
 class AliceController extends Controller
 {
@@ -19,41 +20,67 @@ class AliceController extends Controller
     private $end_session;
     private $text;
     private $ttl;
+    private $message_id;
+    private $session_id;
+    private $skill_id;
+    private $new;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
+        $this->message_id = null;
+        $this->session_id = null;
+        $this->skill_id = null;
+        $this->user_id = null;
+        $this->new = null;
+
+        $this->end_session = true;
         $this->validUser  = false;
         $this->isAdmin = false;
-        $this->user_id = false;
-        $this->end_session = false;
-        $this->text = 'test';
-        $this->ttl = 'test';
+        $this->text = '';
+        $this->ttl = '';
+
+
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $apiRequestArray = json_decode(trim(file_get_contents('php://input')), true);
-//        Log::info($apiRequestArray);
-        //$this->process($apiRequestArray);
+        //Log::debug($request->getContent()); @Todo для дебагинга
 
-        $apiRequestArray['session']['session_id'] = '6dffcae1-8be0-41da-98d1-499776524e20';
-        $apiRequestArray['session']['session_id'] = '8ecdeb35-0c30-4353-902f-9d63a4ae68c6';
-        $apiRequestArray['session']['session_id'] = '13D65C01F8B51512AF66DAC3DCAE2F893A9D3E8B0851A6BF9C44EB512D48F065';
+        //dd($request->getContent());
+        /*
+        dd($request->json()->all());
+        */
+        $request_json = $request->json()->get('session');
+
+        $this->message_id = $request_json["message_id"];
+        $this->session_id = $request_json["session_id"];
+        $this->skill_id = $request_json["skill_id"];
+        $this->user_id = $request_json["user_id"];
+        $this->new = $request_json["new"];
+
+
+
+        //$this->process([]);
+
+        $this->text = 'test';
+        $this->ttl = 'test';
+
         $arrayToEncode = [
             'response' =>
                 [
-                    'text' => 'lol',//$this->text,
+                    'text' => $this->text,
                     'tts' => $this->ttl,
-                    'end_session' => false,
+                    'end_session' => $this->end_session,
                 ],
             'session' =>
                 [
-                    'session_id'    => $apiRequestArray['session']['session_id'],
-                    'message_id'    => $apiRequestArray['session']['message_id'],
-                    'user_id'       => $apiRequestArray['session']['user_id'],
+                    'session_id'    => $this->session_id,
+                    'message_id'    => $this->message_id,
+                    'user_id'       => $this->user_id,
                 ],
             'version' => '1.0',
         ];
+
 
         return response()->json($arrayToEncode);
 

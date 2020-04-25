@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 //use App\Helpers\TelegramHelper;
+use App\Services\TelegramService;
 use Illuminate\Console\Command;
 
 class telegram_bot extends Command
@@ -39,12 +40,10 @@ class telegram_bot extends Command
      */
     public function handle()
     {
-        /*
-        $bot = new TelegramHelper();
+        $bot = new TelegramService();
         while (true) {
             $bot->getUpdates();
             sleep(7);
         }
-        */
     }
 }

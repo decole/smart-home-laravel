@@ -80,10 +80,10 @@ class MqttSecure extends Model
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function storeSecureSensor(\Illuminate\Http\Request $request)
+    public static function storeSecureSensor(\Illuminate\Http\Request $request)
     {
         $sensor = new self();
-        $sensor = self::collecting($sensor, $request);
+        $sensor->collecting($sensor, $request);
         $sensor->save();
     }
 
@@ -93,10 +93,10 @@ class MqttSecure extends Model
      * @param $id
      * @param \Illuminate\Http\Request $request
      */
-    public function updateSecureSensor($id, \Illuminate\Http\Request $request)
+    public static function updateSecureSensor($id, \Illuminate\Http\Request $request)
     {
         $sensor = self::find($id);
-        $sensor = self::collecting($sensor, $request);
+        $sensor->collecting($sensor, $request);
         $sensor->save();
     }
 

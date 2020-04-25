@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DeviceLocation;
 use App\DeviceType;
 use App\MqttSecure;
+use App\Services\MqttService;
 use Illuminate\Http\Request;
 
 class SecureController extends Controller
@@ -52,8 +53,8 @@ class SecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttSecure;
-        $model->storeSecureSensor($request);
+        MqttSecure::storeSecureSensor($request);
+        MqttService::createDataset('secure');
 
         return redirect('/secure')->with('success', 'Датчик системы безопасности добавлен!');
 
@@ -102,8 +103,8 @@ class SecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttSecure;
-        $model->updateSecureSensor($id, $request);
+        MqttSecure::updateSecureSensor($id, $request);
+        MqttService::createDataset('secure');
 
         return redirect('/secure')->with([
             'success' => 'Датчик системы безопасности обновлен!',
@@ -122,6 +123,7 @@ class SecureController extends Controller
     {
         $contact = MqttSecure::find($id);
         $contact->delete();
+        MqttService::createDataset('secure');
 
         return redirect('/secure')->with([
             'success' => 'Датчик системы безопасности удален!',

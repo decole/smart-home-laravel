@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <label for="topic">Тема (Topic):</label>
                                 <input type="text" class="form-control" name="topic" autocomplete="off" value="{{ old('topic') }}" />
-                            </div>normal_condition
+                            </div>
                             <div class="form-group">
                                 <label for="topic">normal_condition:</label>
                                 <input type="text" class="form-control" name="normal_condition" autocomplete="off" value="{{ old('normal_condition') }}" />

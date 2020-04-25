@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MqttFireSecure;
+use App\Services\MqttService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -53,8 +54,8 @@ class FireSecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttFireSecure;
-        $model->storeFireSecureSensor($request);
+        MqttFireSecure::storeFireSecureSensor($request);
+        MqttService::createDataset('fire_secure');
 
         return redirect('/fire_secure')->with('success', 'Датчик противопожарной системы безопасности добавлен!');
     }
@@ -101,8 +102,8 @@ class FireSecureController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttFireSecure;
-        $model->updateFireSecureSensor($id, $request);
+        MqttFireSecure::updateFireSecureSensor($id, $request);
+        MqttService::createDataset('fire_secure');
 
         return redirect('/fire_secure')->with([
             'success' => 'Датчик противопожарной системы безопасности обновлен!',
@@ -120,6 +121,7 @@ class FireSecureController extends Controller
     {
         $contact = MqttFireSecure::find($id);
         $contact->delete();
+        MqttService::createDataset('fire_secure');
 
         return redirect('/fire_secure')->with([
             'success' => 'Датчик противопожарной системы безопасности удален!',

@@ -1,5 +1,5 @@
 @extends('container.template')
-@section('title', 'Пристройка')
+@section('title', 'Все данные')
 
 @section('footer-scripts')
     @parent

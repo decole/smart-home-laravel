@@ -2,6 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Jobs\SendEmail;
+use App\Jobs\SendTelegramNotify;
+use App\Mail\UserSendEmail;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -18,7 +22,7 @@ class UserNotify extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $data;
+    public $data;
     /**
      * Create a new notification instance.
      *
@@ -37,7 +41,7 @@ class UserNotify extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['database']; //'database', 'mail',
     }
 
     /**
@@ -48,14 +52,11 @@ class UserNotify extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-
-        $email = (new MailMessage)
-                    ->subject('Уведомление c uberserver.ru')
-                    ->greeting('Привет!')
-                    ->line($this->data)
-                    ->line('');
-//        return Mail::to("env('EMAIL_NOTIFY')")
-//            ->queue($email);
+        return (new MailMessage)
+            ->subject('Уведомление c uberserver.ru')
+            ->greeting('test')
+            ->line($this->data)
+            ->line('');
     }
 
     /**
@@ -66,6 +67,7 @@ class UserNotify extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        SendEmail::dispatch($this->data);
         return [
             'type' => 'site_notify',
             'message' => $this->data,

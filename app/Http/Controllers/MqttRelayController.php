@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DeviceLocation;
 use App\DeviceType;
 use App\MqttRelay;
+use App\Services\MqttService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -57,8 +58,8 @@ class MqttRelayController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttRelay();
-        $model->storeRelay($request);
+        MqttRelay::storeRelay($request);
+        MqttService::createDataset('relays');
 
         return redirect('/relays')->with('success', 'Реле сохранено!');
     }
@@ -106,8 +107,8 @@ class MqttRelayController extends Controller
             'topic'=>'required',
         ]);
 
-        $model = new MqttRelay();
-        $model->updateRelay($id, $request);
+        MqttRelay::updateRelay($id, $request);
+        MqttService::createDataset('relays');
 
         return redirect('/relays')->with([
             'success' => 'Реле обновлено!',
@@ -126,6 +127,7 @@ class MqttRelayController extends Controller
     {
         $contact = MqttRelay::find($id);
         $contact->delete();
+        MqttService::createDataset('relays');
 
         return redirect('/relays')->with([
             'success' => 'Реле удалено!',

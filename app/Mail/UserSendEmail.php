@@ -29,7 +29,7 @@ class UserSendEmail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('emails.user_notify', [
+        return $this->from(env('MAIL_USERNAME'), 'Уведомление системы умного дома')->view('emails.user_notify', [
             'feedback' => $this->data,
         ]);
     }

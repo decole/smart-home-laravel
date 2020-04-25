@@ -1,8 +1,8 @@
 <!-- Main Footer -->
 <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
+    <strong>Лицензия &copy; 2014-<?=date('Y')?> <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
+    Все права защищены.
     <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 3.0.1
+        <b>Версия</b> 3.0.1
     </div>
 </footer>

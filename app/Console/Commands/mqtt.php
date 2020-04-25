@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Helpers\MqttHelper;
 use App\Services\MqttService;
 use Illuminate\Console\Command;
 
