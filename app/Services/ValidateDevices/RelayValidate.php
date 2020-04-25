@@ -1,10 +1,12 @@
 <?php
 
-
 namespace App\Services\ValidateDevices;
 
 
 use App\MqttRelay;
+use App\Notifications\RelayNotify;
+use App\Services\DataService;
+use App\Services\DeviceService;
 use Illuminate\Support\Facades\Cache;
 
 class RelayValidate implements DeviceInterface
@@ -65,11 +67,46 @@ class RelayValidate implements DeviceInterface
      */
     public function deviceValidate($message)
     {
-        /**
-         * @Todo analise logic
-         */
-        echo $message->topic . ' is relay' . PHP_EOL;
-        return true;
+        if (!Cache::has($this->topicModel)) {
+            self::createDataset();
+        }
+        $model = Cache::get($this->topicModel);
+        foreach ($model as $value) {
+            if ($value['check_topic'] == $message->topic) {
+                if (DeviceService::is_active($value) == false) {
+                    break;
+                }
+                if (
+                    ((string)$message->payload != (string)$value['check_command_on']) &&
+                    ((string)$message->payload != (string)$value['check_command_off'])
+                ) {
+                    self::createDataset();
+                    if (DeviceService::is_notifying($value)) {
+                        $text = DataService::getTextNotify($value['message_warn'], (string)$message->payload);
+                        DeviceService::SendNotify(new RelayNotify($text, $message));
+                    }
+                }
+                break;
+            }
+        }
+        foreach ($model as $value) {
+            if ($value['topic'] == $message->topic) {
+                if (DeviceService::is_active($value) == false) {
+                    $notify = 'на деактивированный топик ' . $message->topic . ' пришла комманда {value}';
+                    DeviceService::SendNotify(new RelayNotify($notify, $message));
+                    break;
+                }
+                $payload = $message->payload;
+                if ($value['command_on'] == $payload || $value['command_off'] == $payload) {
+                    /** @var MqttRelay $relay */
+                    $relay = MqttRelay::where('topic', $message->topic)->first();
+                    $relay->last_command = $payload;
+                    $relay->save();
+                    self::createDataset();
+                }
+                break;
+            }
+        }
     }
 
 }

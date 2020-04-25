@@ -1,10 +1,12 @@
 <?php
 
-
 namespace App\Services\ValidateDevices;
 
 
 use App\MqttSensor;
+use App\Notifications\SensorNotify;
+use App\Services\DataService;
+use App\Services\DeviceService;
 use Illuminate\Support\Facades\Cache;
 
 class SensorValidate implements DeviceInterface
@@ -61,11 +63,22 @@ class SensorValidate implements DeviceInterface
      */
     public function deviceValidate($message)
     {
-        /**
-         * @Todo analise logic
-         */
-        echo $message->topic . ' is sensor' . PHP_EOL;
-        return true;
+        if (!Cache::has($this->topicModel)) {
+            self::createDataset();
+        }
+        $model = Cache::get($this->topicModel);
+        foreach ($model as $value) {
+            if ($value['topic'] == $message->topic) {
+                if (
+                    ($value['from_condition'] && (integer)$message->payload < (integer)$value['from_condition']) ||
+                    ($value['to_condition'] && (integer)$message->payload > (integer)$value['to_condition'])
+                ) {
+                    $text = DataService::getTextNotify($value['message_warn'], (string)$message->payload);
+                    DeviceService::SendNotify(new SensorNotify($text, $message));
+                }
+                break;
+            }
+        }
     }
 
 }

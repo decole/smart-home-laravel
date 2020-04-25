@@ -1,18 +1,17 @@
 <?php
 
-
 namespace App\Services;
 
 
-use App\MqttFireSecure;
-use App\MqttRelay;
-use App\MqttSecure;
-use App\MqttSensor;
+use App\Notifications\SensorNotify;
 use App\Services\ValidateDevices\FireSecureValidate;
 use App\Services\ValidateDevices\RelayValidate;
 use App\Services\ValidateDevices\SecureValidate;
 use App\Services\ValidateDevices\SensorValidate;
+use App\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Notification;
 
 class DeviceService
 {
@@ -48,12 +47,12 @@ class DeviceService
 
     public function __construct()
     {
+        self::refresh();
+
         $this->sensor     = new SensorValidate($this->sensor_list, $this->sensor_model);
         $this->relay      = new RelayValidate($this->relay_list, $this->relay_model);
         $this->secure     = new SecureValidate($this->secure_list, $this->secure_model);
         $this->fireSecure = new FireSecureValidate($this->fireSecure_list, $this->fireSecure_model);
-
-        self::refresh();
     }
 
     /**
@@ -76,6 +75,11 @@ class DeviceService
         }
     }
 
+    /**
+     * Обновления кэша топиков
+     *
+     * @return void
+     */
     public function refresh()
     {
         Cache::forget($this->sensor_list);
@@ -89,6 +93,50 @@ class DeviceService
 
         Cache::forget($this->fireSecure_list);
         Cache::forget($this->fireSecure_model);
+    }
+
+    /**
+     * Проверка возможности отправки нотификации
+     *
+     * @param $value
+     * @return bool
+     */
+    public static function is_notifying($value)
+    {
+        return $value['notifying'];
+    }
+
+    /**
+     * Проверка активности топиков из БД
+     *
+     * @param $value
+     * @return bool
+     */
+    public static function is_active($value)
+    {
+        return $value['active'];
+    }
+
+    /**
+     * Отправка уведомлений
+     *
+     * @param \Illuminate\Notifications\Notification $object
+     */
+    public static function SendNotify(\Illuminate\Notifications\Notification $object)
+    {
+        /** @var SensorNotify $note */
+        $note = $object;
+        $user = User::where('name', 'decole')->first();
+        foreach ($user->unreadNotifications as $notification) {
+            if ($notification->data['message'] == $note->message) {
+                $startTime = Carbon::parse($notification->created_at);
+                $finishTime = Carbon::now();
+                if ($finishTime->diffInSeconds($startTime) > 20) {
+                    Notification::send($user, $object);
+                }
+                break;
+            }
+        }
     }
 
 }

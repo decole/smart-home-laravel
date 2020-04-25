@@ -1,10 +1,12 @@
 <?php
 
-
 namespace App\Services\ValidateDevices;
 
 
 use App\MqttSecure;
+use App\Notifications\SecureNotify;
+use App\Services\DataService;
+use App\Services\DeviceService;
 use Illuminate\Support\Facades\Cache;
 
 class SecureValidate implements DeviceInterface
@@ -61,11 +63,25 @@ class SecureValidate implements DeviceInterface
      */
     public function deviceValidate($message)
     {
-        /**
-         * @Todo analise logic
-         */
-        echo $message->topic . ' is secure' . PHP_EOL;
-        return true;
+        if (!Cache::has($this->topicModel)) {
+            self::createDataset();
+        }
+        $model = Cache::get($this->topicModel);
+        foreach ($model as $value) {
+            if ($value['topic'] == $message->topic) {
+                if (
+                    (integer)$value['alarm_condition'] == (integer)$message->payload &&
+                    $value['trigger'] == true &&
+                    DeviceService::is_notifying($value)
+                ) {
+                    if ($value['notifying'] == true) {
+                        $text = DataService::getTextNotify($value['message_warn'], (string)$message->payload);
+                        DeviceService::SendNotify(new SecureNotify($text, $message));
+                    }
+                }
+                break;
+            }
+        }
     }
 
 }

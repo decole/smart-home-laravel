@@ -1,10 +1,12 @@
 <?php
 
-
 namespace App\Services\ValidateDevices;
 
 
 use App\MqttFireSecure;
+use App\Notifications\FireSecureNotify;
+use App\Services\DataService;
+use App\Services\DeviceService;
 use Illuminate\Support\Facades\Cache;
 
 class FireSecureValidate implements DeviceInterface
@@ -61,11 +63,19 @@ class FireSecureValidate implements DeviceInterface
      */
     public function deviceValidate($message)
     {
-        /**
-         * @Todo analise logic
-         */
-        echo $message->topic . ' is fire_secure' . PHP_EOL;
-        return true;
+        if (!Cache::has($this->topicModel)) {
+            self::createDataset();
+        }
+        $model = Cache::get($this->topicModel);
+        foreach ($model as $value) {
+            if ($value['topic'] == $message->topic) {
+                if ($value['alarm_condition'] == $message->payload) {
+                    $text = DataService::getTextNotify($value['message_warn'], (string)$message->payload);
+                    DeviceService::SendNotify(new FireSecureNotify($text, $message));
+                }
+                break;
+            }
+        }
     }
 
 }
