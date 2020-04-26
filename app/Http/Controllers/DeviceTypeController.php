@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
 use App\DeviceType;
+use App\Services\DeviceService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -22,9 +24,7 @@ class DeviceTypeController extends Controller
     public function index()
     {
         $typeDevice = DeviceType::all()->sortBy('id');
-
         return view('crud.type.index', compact('typeDevice'));
-
     }
 
     /**
@@ -56,8 +56,9 @@ class DeviceTypeController extends Controller
         ]);
         $sensor->save();
 
-        return redirect('/types')->with('success', 'Тип датчика сохранен!');
+        (new DeviceService)->refresh();
 
+        return redirect('/types')->with('success', 'Тип датчика сохранен!');
     }
 
     /**
@@ -80,9 +81,7 @@ class DeviceTypeController extends Controller
     public function edit($id)
     {
         $type = DeviceType::find($id);
-
         return view('crud.type.edit', compact('type'));
-
     }
 
     /**
@@ -104,10 +103,11 @@ class DeviceTypeController extends Controller
         $sensor->type = $request->get('type');
         $sensor->save();
 
+        (new DeviceService)->refresh();
+
         return redirect('/types')->with([
             'success' => 'Тип датчика обновлен!',
         ]);
-
     }
 
     /**
@@ -122,9 +122,10 @@ class DeviceTypeController extends Controller
         $contact = DeviceType::find($id);
         $contact->delete();
 
+        (new DeviceService)->refresh();
+
         return redirect('/types')->with([
             'success' => 'Тип датчика удален!',
         ]);
-
     }
 }

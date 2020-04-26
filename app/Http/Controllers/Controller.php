@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\DeviceLocation;
 use App\DeviceType;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

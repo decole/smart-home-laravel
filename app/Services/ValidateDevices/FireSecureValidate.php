@@ -55,6 +55,7 @@ class FireSecureValidate implements DeviceInterface
         Cache::rememberForever($this->topicList, function () use ($topics) {
             return $topics;
         });
+
         return $topics;
     }
 

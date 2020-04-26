@@ -41,7 +41,6 @@ class NotificationController extends Controller
         return redirect('/notifications')->with([
             'success' => 'Сообщения прочитаны!',
         ]);
-
     }
 
 }

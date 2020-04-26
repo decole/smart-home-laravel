@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\DeviceLocation;
-use App\DeviceType;
+
 use App\MqttSecure;
-use App\Services\MqttService;
+use App\Services\DeviceService;
 use Illuminate\Http\Request;
 
 class SecureController extends Controller
@@ -19,11 +18,10 @@ class SecureController extends Controller
     {
         $secures = MqttSecure::where('id', '>', 0)
             ->orderBy('id', 'asc')
-            ->with(['devicetype','devicelocation'])
+            ->with(['devicetype', 'devicelocation'])
             ->paginate(15);
 
         return view('crud.secure.index', compact('secures'));
-
     }
 
     /**
@@ -33,7 +31,6 @@ class SecureController extends Controller
      */
     public function create()
     {
-        $locations = DeviceLocation::all()->pluck('name', 'id');
         return view('crud.secure.create', [
             'locations' => self::locationsList(),
             'types' => self::typesList(),
@@ -43,27 +40,26 @@ class SecureController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'topic'=>'required',
+            'name' => 'required',
+            'topic' => 'required',
         ]);
 
         MqttSecure::storeSecureSensor($request);
-        MqttService::createDataset('secure');
+        (new DeviceService)->refresh();
 
         return redirect('/secure')->with('success', 'Датчик системы безопасности добавлен!');
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -74,7 +70,7 @@ class SecureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
@@ -86,30 +82,28 @@ class SecureController extends Controller
             'locations' => self::locationsList(),
             'types' => self::typesList(),
         ]);
-
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'=>'required',
-            'topic'=>'required',
+            'name' => 'required',
+            'topic' => 'required',
         ]);
 
         MqttSecure::updateSecureSensor($id, $request);
-        MqttService::createDataset('secure');
+        (new DeviceService)->refresh();
 
         return redirect('/secure')->with([
             'success' => 'Датчик системы безопасности обновлен!',
         ]);
-
     }
 
     /**
@@ -123,12 +117,11 @@ class SecureController extends Controller
     {
         $contact = MqttSecure::find($id);
         $contact->delete();
-        MqttService::createDataset('secure');
+        (new DeviceService)->refresh();
 
         return redirect('/secure')->with([
             'success' => 'Датчик системы безопасности удален!',
         ]);
-
     }
 
 }

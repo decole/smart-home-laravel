@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\MqttRelay;
 use App\MqttSensor;
 use App\Notifications\UserNotify;
@@ -34,7 +35,6 @@ class HomeController extends Controller
         return view('index', [
             'success' => Auth::user()->email,
         ]);
-
     }
 
     /**

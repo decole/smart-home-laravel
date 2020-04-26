@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DeviceLocation;
+use App\Services\DeviceService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -21,9 +22,7 @@ class DeviceLocationController extends Controller
     public function index()
     {
         $locationDevices = DeviceLocation::all()->sortBy('id');
-
         return view('crud.location.index', compact('locationDevices'));
-
     }
 
     /**
@@ -55,8 +54,9 @@ class DeviceLocationController extends Controller
         ]);
         $sensor->save();
 
-        return redirect('/locations')->with('success', 'Место расположения сохранено!');
+        (new DeviceService)->refresh();
 
+        return redirect('/locations')->with('success', 'Место расположения сохранено!');
     }
 
     /**
@@ -82,7 +82,6 @@ class DeviceLocationController extends Controller
         $error = null;
 
         return view('crud.location.edit', compact('location'))->with('error');
-
     }
 
     /**
@@ -104,10 +103,11 @@ class DeviceLocationController extends Controller
         $sensor->location = $request->get('location');
         $sensor->save();
 
+        (new DeviceService)->refresh();
+
         return redirect('/locations')->with([
             'success' => 'Место расположения обновлено!',
         ]);
-
     }
 
     /**
@@ -122,9 +122,10 @@ class DeviceLocationController extends Controller
         $contact = DeviceLocation::find($id);
         $contact->delete();
 
+        (new DeviceService)->refresh();
+
         return redirect('/locations')->with([
             'success' => 'Место расположения удалено!',
         ]);
-
     }
 }

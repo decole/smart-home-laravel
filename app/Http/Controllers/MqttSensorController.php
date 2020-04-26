@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MqttSensor;
-use App\Services\MqttService;
+use App\Services\DeviceService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +28,6 @@ class MqttSensorController extends Controller
             ->paginate(15);
 
         return view('crud.sensor.index', compact('sensors'));
-
     }
 
     /**
@@ -58,10 +57,9 @@ class MqttSensorController extends Controller
         ]);
 
         MqttSensor::storeSensor($request);
-        MqttService::createDataset('sensors');
+        (new DeviceService)->refresh();
 
         return redirect('/sensors')->with('success', 'Датчик сохранен!');
-
     }
 
     /**
@@ -90,7 +88,6 @@ class MqttSensorController extends Controller
             'locations' => self::locationsList(),
             'types' => self::typesList(),
         ]);
-
     }
 
     /**
@@ -108,12 +105,11 @@ class MqttSensorController extends Controller
         ]);
 
         MqttSensor::updateSensor($id, $request);
-        MqttService::createDataset('sensors');
+        (new DeviceService)->refresh();
 
         return redirect('/sensors')->with([
             'success' => 'Датчик обновлен!',
         ]);
-
     }
 
     /**
@@ -127,11 +123,10 @@ class MqttSensorController extends Controller
     {
         $contact = MqttSensor::find($id);
         $contact->delete();
-        MqttService::createDataset('sensors');
+        (new DeviceService)->refresh();
 
         return redirect('/sensors')->with([
             'success' => 'Датчик удален!',
         ]);
-
     }
 }
