@@ -13,7 +13,7 @@
 
         <!-- Left col -->
         <section class="col-lg-6 col-xs-12 connectedSortable ui-sortable">
-            @include('snippet.relay_v1', ['swift' => $relays])
+
         </section>
         <!-- /.Left col -->
 

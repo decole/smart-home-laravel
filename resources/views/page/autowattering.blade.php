@@ -5,11 +5,48 @@
     @parent
     <script src="{{ asset("plugins/bootstrap-switch/js/bootstrap-switch.min.js") }}"></script>
     <script>
-        $(function () {
-            $("input[data-bootstrap-switch]").each(function(){
-                $(this).bootstrapSwitch('state', $(this).prop('checked'));
-            });
+$(document).ready(function() {
+    $(function () {
+        $("input[data-bootstrap-switch]").each(function(){
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
         });
+    });
+
+    $("input[data-bootstrap-switch]").on('switchChange.bootstrapSwitch', function(event, state) {
+        let $this = $(this);
+        let topic = $this.data('topic');
+        let topic_on = $this.data('topic-command-on');
+        let topic_off = $this.data('topic-command-off');
+        let payload;
+
+        if (state)  { payload = topic_on; }
+        if (!state) { payload = topic_off; }
+        $.post( "/api/mqtt/post", { topic: topic, payload: payload })
+    });
+
+    function swiftStateRefrash() {
+        let $this = $("input[data-bootstrap-switch]");
+        if($this.length > 0) {
+            $this.map(function (key, value) {
+                let topic           = $(value).data('topic');
+                let topic_check_on  = $(value).data('check-command-on');
+                let topic_check_off = $(value).data('check-command-off');
+                let topic_check     = $(value).data('check-topic');
+                $.get("/api/mqtt/get?topic="+topic_check, function (data) {
+                    let payload = data['payload'];
+                    if (payload == topic_check_on)  {$(value).bootstrapSwitch('state', true);}
+                    if (payload == topic_check_off) {$(value).bootstrapSwitch('state', false);}
+                });
+
+            });
+
+            setTimeout(swiftStateRefrash, 10000);
+        }
+    }
+
+    swiftStateRefrash();
+
+});
     </script>
 @endsection
 
@@ -41,34 +78,20 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                        <?php $_i = 0;?>
+                                        @foreach($swifts as $swift)
                                         <tr>
-                                            <td>[ 0 ] - Главный клапан</td>
-                                            <td>Включен</td>
+                                            <td>[ {{ $_i++ }} ] - {{$swift->name}}</td>
+                                            <td class="watering-state">Выключен</td>
                                             <td class="text-right py-0 align-middle">
-                                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="success" data-on-color="danger">
+<input type="checkbox" name="{{ $swift->topic }}" data-topic="{{ $swift->topic }}" data-check-topic="{{ $swift->check_topic }}"
+    data-check-command-on="{{ $swift->check_command_on }}" data-check-command-off="{{ $swift->check_command_off }}"
+    data-topic-command-on="{{ $swift->command_on }}" data-topic-command-off="{{ $swift->command_off }}"
+    data-bootstrap-switch data-off-color="success" data-on-color="danger">
                                             </td>
-                                        </tr><tr>
-                                            <td>[ 1 ] - Клапан 1</td>
-                                            <td>Включен</td>
-                                            <td class="text-right py-0 align-middle">
-                                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="success" data-on-color="danger">
-                                            </td>
-                                        </tr><tr>
-                                        </tr><tr>
-                                            <td>[ 2 ] - Клапан 2</td>
-                                            <td>Выключен</td>
-                                            <td class="text-right py-0 align-middle">
-                                                <input type="checkbox" name="my-checkbox" data-bootstrap-switch data-off-color="success" data-on-color="danger">
-                                            </td>
-                                        </tr><tr>
-                                            <td>[ 3 ] - Клапан 3</td>
-                                            <td>Выключен</td>
-                                            <td class="text-right py-0 align-middle">
-                                                <input type="checkbox" name="my-checkbox" data-bootstrap-switch data-off-color="success" data-on-color="danger">
-                                            </td>
-
-                                        </tr></tbody>
+                                        </tr>
+                                        @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
@@ -94,9 +117,10 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                        <?php $_i = 0?>
+                                        @foreach($swifts as $swift)
                                         <tr>
-                                            <td>[ 0 ] - Главный клапан</td>
+                                            <td>[ {{ $_i++ }} ] - {{$swift->name}}</td>
                                             <td>
                                                 Включится 22.04.2020 в 07:00 <br>
                                                 Выключится 22.04.2020 в 10:00
@@ -105,39 +129,9 @@
                                                 <button type="button" class="btn btn-default" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
                                                     <i class="fas fa-cogs"></i></button>
                                             </td>
-                                        </tr><tr>
-                                            <td>[ 1 ] - Клапан 1</td>
-                                            <td>
-                                                Включится 22.04.2020 в 07:00 <br>
-                                                Выключится 22.04.2020 в 08:00
-                                            </td>
-                                            <td class="text-right py-0 align-middle">
-                                                <button type="button" class="btn btn-default" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                                    <i class="fas fa-cogs"></i></button>
-                                            </td>
-                                        </tr><tr>
-                                        </tr><tr>
-                                            <td>[ 2 ] - Клапан 2</td>
-                                            <td>
-                                                Включится 22.04.2020 в 08:00 <br>
-                                                Выключится 22.04.2020 в 09:00
-                                            </td>
-                                            <td class="text-right py-0 align-middle">
-                                                <button type="button" class="btn btn-default" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                                    <i class="fas fa-cogs"></i></button>
-                                            </td>
-                                        </tr><tr>
-                                            <td>[ 3 ] - Клапан 3</td>
-                                            <td>
-                                                Включится 22.04.2020 в 09:00 <br>
-                                                Выключится 22.04.2020 в 10:00
-                                            </td>
-                                            <td class="text-right py-0 align-middle">
-                                                <button type="button" class="btn btn-default" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                                    <i class="fas fa-cogs"></i></button>
-                                            </td>
-
-                                        </tr></tbody>
+                                        </tr>
+                                        @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
@@ -223,6 +217,5 @@
             </div>
         </div>
     </section>
-
 
 @endsection

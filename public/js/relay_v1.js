@@ -15,32 +15,27 @@ $(document).ready(function() {
         $this.addClass('active');
     });
 
-
     function swiftStateRefrash() {
-        if($("div").is($(".relay-control"))) {
-            let $this = $(".relay-control[data-swift-topic]");
+        let $this = $(".relay-control[data-swift-topic]");
+        if($this.length > 0) {
             $this.map(function (key, value) {
                 let topic = $(value).data('swift-topic');
                 let topic_check = $(value).data('swift-topic-check');
-                checkStateTopic(topic_check, $this);
+                $.get("/api/mqtt/get?topic="+topic_check, function (data) {
+                    let payload = data['payload'];
+                    $(value).find('button').map(function (keybtn, valuebtn) {
+                        if ($(valuebtn).data('swift-check') == payload) {
+                            $(valuebtn).addClass('active');
+                        }
+                        else {
+                            $(valuebtn).removeClass('active');
+                        }
+                    });
+                });
             });
 
             setTimeout(swiftStateRefrash, 10000);
         }
-    }
-
-    function checkStateTopic(topic_check, obj) {
-        $.get("/api/mqtt/get?topic="+topic_check, function (data) {
-            let payload = data['payload'];
-            $(obj).find('button').map(function (keybtn, valuebtn) {
-                if ($(valuebtn).data('swift-check') == payload) {
-                    $(valuebtn).addClass('active');
-                }
-                else {
-                    $(valuebtn).removeClass('active');
-                }
-            });
-        });
     }
 
     swiftStateRefrash();

@@ -78,7 +78,13 @@ class HomeController extends Controller
 
     public function watering()
     {
-        return view('page.autowattering');
+
+        return view('page.autowattering', [
+            'swifts' => MqttRelay::where('type', '=', '8')
+                ->where('location', '=', '4')
+                ->orderBy('id', 'asc')
+                ->get(),
+        ]);
     }
 
     public function settings()
