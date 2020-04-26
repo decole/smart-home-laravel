@@ -127,15 +127,22 @@ class DeviceService
         /** @var SensorNotify $note */
         $note = $object;
         $user = User::where('name', 'decole')->first();
+        $is_double = false;
         foreach ($user->unreadNotifications as $notification) {
+            echo var_export($notification->data['message'], true) . ' - ';
+            echo var_export($note->message, true) . PHP_EOL;
             if ($notification->data['message'] == $note->message) {
                 $startTime = Carbon::parse($notification->created_at);
                 $finishTime = Carbon::now();
-                if ($finishTime->diffInSeconds($startTime) > 20) {
-                    Notification::send($user, $object);
+                if ($finishTime->diffInSeconds($startTime) < 30) {
+                    $is_double = true;
                 }
                 break;
             }
+        }
+        if (!$is_double) {
+            echo 'sending message, not find double notify'.PHP_EOL;
+            Notification::send($user, $object);
         }
     }
 
