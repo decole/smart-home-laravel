@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\MqttRelay;
 use App\MqttSensor;
 use App\Notifications\UserNotify;
+use App\Services\WateringService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -78,12 +79,16 @@ class HomeController extends Controller
 
     public function watering()
     {
+        $waterTopics = MqttRelay::where('type', '=', '8')
+            ->where('location', '=', '4')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $state = (new WateringService)->getStateOnSite();
 
         return view('page.autowattering', [
-            'swifts' => MqttRelay::where('type', '=', '8')
-                ->where('location', '=', '4')
-                ->orderBy('id', 'asc')
-                ->get(),
+            'swifts' => $waterTopics,
+            'state'  => $state,
         ]);
     }
 

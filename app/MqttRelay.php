@@ -132,6 +132,6 @@ class MqttRelay extends Model
         $sensor->active            = DataService::getCheckboxValue('active', $request);
 
         return $sensor;
-
     }
+
 }

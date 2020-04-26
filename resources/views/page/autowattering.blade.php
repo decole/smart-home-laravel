@@ -3,8 +3,10 @@
 
 @section('footer-scripts')
     @parent
-    <script src="{{ asset("plugins/bootstrap-switch/js/bootstrap-switch.min.js") }}"></script>
+    <script src="{{ asset("js/relay_v1.js") }}"></script>
+{{--    <script src="{{ asset("plugins/bootstrap-switch/js/bootstrap-switch.min.js") }}"></script>--}}
     <script>
+        /*
 $(document).ready(function() {
     $(function () {
         $("input[data-bootstrap-switch]").each(function(){
@@ -34,8 +36,15 @@ $(document).ready(function() {
                 let topic_check     = $(value).data('check-topic');
                 $.get("/api/mqtt/get?topic="+topic_check, function (data) {
                     let payload = data['payload'];
-                    if (payload == topic_check_on)  {$(value).bootstrapSwitch('state', true);}
-                    if (payload == topic_check_off) {$(value).bootstrapSwitch('state', false);}
+                    let tdState = $this.parent().parent().parent().parent().find('td[class="watering-state"]')
+                    if (payload == topic_check_on)  {
+                        $(value).bootstrapSwitch('state', true);
+                        $(tdState).html('Включен');
+                    }
+                    if (payload == topic_check_off) {
+                        $(value).bootstrapSwitch('state', false);
+                        $(tdState).html('Выключен');
+                    }
                 });
 
             });
@@ -47,6 +56,7 @@ $(document).ready(function() {
     swiftStateRefrash();
 
 });
+*/
     </script>
 @endsection
 
@@ -73,7 +83,7 @@ $(document).ready(function() {
                                         <thead>
                                         <tr>
                                             <th>Клапан</th>
-                                            <th>Состояние</th>
+                                            <th>Топик</th>
                                             <th>Команда</th>
                                         </tr>
                                         </thead>
@@ -82,12 +92,16 @@ $(document).ready(function() {
                                         @foreach($swifts as $swift)
                                         <tr>
                                             <td>[ {{ $_i++ }} ] - {{$swift->name}}</td>
-                                            <td class="watering-state">Выключен</td>
+                                            <td class="watering-state">{{ $swift->topic }}</td>
                                             <td class="text-right py-0 align-middle">
-<input type="checkbox" name="{{ $swift->topic }}" data-topic="{{ $swift->topic }}" data-check-topic="{{ $swift->check_topic }}"
-    data-check-command-on="{{ $swift->check_command_on }}" data-check-command-off="{{ $swift->check_command_off }}"
-    data-topic-command-on="{{ $swift->command_on }}" data-topic-command-off="{{ $swift->command_off }}"
-    data-bootstrap-switch data-off-color="success" data-on-color="danger">
+                                                <div class="btn-group relay-control" data-swift-topic="{{ $swift->topic }}" data-swift-topic-check="{{ $swift->check_topic }}" data-swift-id="{{ $swift->id }}" data-swift-on="{{ $swift->check_command_on }}" data-swift-off="{{ $swift->check_command_off }}">
+                                                    <button type="button" class="btn btn-outline-success" data-swift-topic="{{ $swift->topic }}" data-swift-check="{{ $swift->check_command_on }}" value="{{ $swift->command_on }}">On</button>
+                                                    <button type="button" class="btn btn-outline-danger" data-swift-topic="{{ $swift->topic }}" data-swift-check="{{ $swift->check_command_off }}" value="{{ $swift->command_off }}">Off</button>
+                                                </div>
+{{--<input type="checkbox" name="{{ $swift->topic }}" data-topic="{{ $swift->topic }}" data-check-topic="{{ $swift->check_topic }}"--}}
+{{--    data-check-command-on="{{ $swift->check_command_on }}" data-check-command-off="{{ $swift->check_command_off }}"--}}
+{{--    data-topic-command-on="{{ $swift->command_on }}" data-topic-command-off="{{ $swift->command_off }}"--}}
+{{--    data-bootstrap-switch data-off-color="success" data-on-color="danger">--}}
                                             </td>
                                         </tr>
                                         @endforeach
@@ -118,17 +132,15 @@ $(document).ready(function() {
                                         </thead>
                                         <tbody>
                                         <?php $_i = 0?>
-                                        @foreach($swifts as $swift)
+                                        @foreach($state as $swift)
                                         <tr>
-                                            <td>[ {{ $_i++ }} ] - {{$swift->name}}</td>
-                                            <td>
-                                                Включится 22.04.2020 в 07:00 <br>
-                                                Выключится 22.04.2020 в 10:00
-                                            </td>
-                                            <td class="text-right py-0 align-middle">
-                                                <button type="button" class="btn btn-default" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                                    <i class="fas fa-cogs"></i></button>
-                                            </td>
+                                            <td rowspan="2" class="text-left py-0 align-middle">[ {{ $_i++ }} ] - {{$swift->name}}</td>
+                                            <td class="text-right py-0 align-middle">Включится&nbsp;&nbsp;&nbsp;&nbsp;{{ $swift->watering_start['start_time'] }}</td>
+                                            <td class="text-center py-0 align-middle"><a href="{{ route('scheduler.edit',$swift->watering_start['start_time_job_id']) }}" class="btn btn-default"><i class="fas fa-cogs"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right py-0 align-middle">Выключится&nbsp;{{ $swift->watering_start['end_time'] }}</td>
+                                            <td class="text-center py-0 align-middle"><a href="{{ route('scheduler.edit',$swift->watering_start['end_time_job_id']) }}" class="btn btn-default"><i class="fas fa-cogs"></i></a></td>
                                         </tr>
                                         @endforeach
                                         </tbody>
@@ -217,5 +229,4 @@ $(document).ready(function() {
             </div>
         </div>
     </section>
-
 @endsection

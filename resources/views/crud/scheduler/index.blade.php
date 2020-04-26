@@ -57,7 +57,7 @@
                                 <td>{{$schedule->last_run}}</td>
                                 <td>{{$schedule->next_run}}</td>
                                 <td>
-                                    <a href="{{ route('scheduler.edit',$schedule->id)}}" class="btn btn-primary btn-sm">Изменить</a>
+                                    <a href="{{ route('scheduler.edit',$schedule->id) }}" class="btn btn-primary btn-sm">Изменить</a>
                                 </td>
                                 <td>
                                     <form action="{{ route('scheduler.destroy', $schedule->id)}}" method="post">
