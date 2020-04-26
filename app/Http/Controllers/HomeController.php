@@ -83,7 +83,9 @@ class HomeController extends Controller
 
     public function settings()
     {
-        return view('page.settings');
+        return view('page.settings', [
+            'relays' => MqttRelay::where('topic', 'margulis/lamp01')->first(),
+        ]);
     }
 
     public function contacts()
