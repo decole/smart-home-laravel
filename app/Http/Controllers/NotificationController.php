@@ -18,7 +18,7 @@ class NotificationController extends Controller
         $user = Auth::user();
 
         return view('crud.notification.index', [
-            'notifications' => $user->unreadNotifications,
+            'notifications' => $user->unreadNotifications()->paginate(10),
         ]);
     }
 
@@ -38,7 +38,8 @@ class NotificationController extends Controller
             }
         }
 
-        return redirect('/notifications')->with([
+//        return redirect('/notifications')->with([
+        return back()->with([
             'success' => 'Сообщения помечены как прочитанные!',
         ]);
     }

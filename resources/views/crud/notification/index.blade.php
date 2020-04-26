@@ -32,9 +32,9 @@
                     </h3>
 
                     <div class="card-tools">
-{{--                        @if($notifications)--}}
-{{--                            {!! $notifications->render() !!}--}}
-{{--                        @endif--}}
+                        @if($notifications)
+                            {!! $notifications->render() !!}
+                        @endif
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -75,7 +75,6 @@
                         @method('DELETE')
                         <button class="btn btn-danger btn-sm" type="submit">Пометить все как прочитанное</button>
                     </form>
-{{--                    <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>--}}
                 </div>
             </div>
             <!-- /.card -->
