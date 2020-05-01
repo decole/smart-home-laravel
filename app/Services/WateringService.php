@@ -4,8 +4,10 @@ namespace App\Services;
 
 
 use App\MqttRelay;
+use App\MqttSensor;
 use App\Schedule;
 use Illuminate\Routing\Controller as BaseController;
+use Longman\TelegramBot\Exception\TelegramException;
 
 class WateringService extends BaseController
 {
@@ -75,15 +77,19 @@ class WateringService extends BaseController
             }
         }
 
-        // @Todo add ternar operators
-        if (empty($scheduleData['start_time'])) { $scheduleData['start_time'] = null; }
-        if (empty($scheduleData['end_time']))   { $scheduleData['end_time']   = null; }
-        if (empty($scheduleData['start_time_job_id']))   { $scheduleData['start_time_job_id']   = null; }
-        if (empty($scheduleData['end_time_job_id']))   { $scheduleData['end_time_job_id']   = null; }
+        (empty($scheduleData['start_time'])) ? $scheduleData['start_time'] = null : $scheduleData['start_time'];
+        (empty($scheduleData['end_time'])) ? $scheduleData['end_time'] = null : $scheduleData['end_time'];
+        (empty($scheduleData['start_time_job_id'])) ? $scheduleData['start_time_job_id'] = null : $scheduleData['start_time_job_id'];
+        (empty($scheduleData['end_time_job_id'])) ? $scheduleData['end_time_job_id'] = null : $scheduleData['end_time_job_id'];
 
         return $scheduleData;
     }
 
+    /**
+     * Вывод данных о командах в планировщике заданий
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function getStateOnSite()
     {
         foreach ($this->waterTopics as $waterTopic) {
@@ -94,5 +100,80 @@ class WateringService extends BaseController
         return $this->waterTopics;
     }
 
+    /**
+     * @param $topic
+     * @return bool
+     */
+    public function turnOn($topic)
+    {
+        if(self::validateTopic($topic)) {
+//            $mqtt = new MqttService();
+            (self::getPayloadCommandOn($topic) === null) ? $payload = 1 : $payload = self::getPayloadCommandOn($topic);
+//            $mqtt->post($topic, $payload);
+            echo $topic . ' - ' . $payload . PHP_EOL;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $topic
+     * @return bool
+     */
+    public function turnOff($topic)
+    {
+        echo $topic . PHP_EOL;
+        if(self::validateTopic($topic)) {
+//            $mqtt = new MqttService();
+            (self::getPayloadCommandOn($topic) === null) ? $payload = 0 : $payload = self::getPayloadCommandOff($topic);
+//            $mqtt->post($topic, $payload);
+            echo $topic . ' - ' . $payload . PHP_EOL;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $topic
+     * @return bool
+     */
+    private function validateTopic($topic)
+    {
+        /** @var MqttSensor $waterTopic */
+        foreach ($this->waterTopics as $waterTopic) {
+            if ($waterTopic->topic == $topic) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $topic
+     * @return mixed|null
+     */
+    private function getPayloadCommandOn($topic)
+    {
+        if(self::validateTopic($topic)) {
+            return $this->waterTopics->where('topic', '=', $topic)->get('command_on');
+        }
+        try { (new TelegramService())->sendDecole('Топик автополива не настроен - ' . $topic); }
+        catch (TelegramException $e) { }
+        return null;
+    }
+
+    /**
+     * @param $topic
+     * @return mixed|null
+     */
+    private function getPayloadCommandOff($topic)
+    {
+        if(self::validateTopic($topic)) {
+            return $this->waterTopics->where('topic', '=', $topic)->get('command_on');
+        }
+        try { (new TelegramService())->sendDecole('Топик автополива не настроен - ' . $topic); }
+        catch (TelegramException $e) { }
+        return null;
+    }
 
 }

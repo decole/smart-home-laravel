@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Watering;
 
 
+use App\Services\WateringService;
 use Illuminate\Console\Command;
 
 class majorOn extends Command
@@ -39,7 +40,8 @@ class majorOn extends Command
      */
     public function handle()
     {
-        $this->info('major-On');
+        $watering = new WateringService();
+        $watering->turnOn('water/major');
     }
 
 }
