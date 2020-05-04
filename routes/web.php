@@ -57,3 +57,5 @@ Route::resource('/history_greenhouse', 'MqttHistoryController');
 Route::resource('/scheduler', 'ScheduleController');
 
 Route::resource('/notifications', 'NotificationController');
+
+Route::resource('/weight', 'HistoryWeightController');

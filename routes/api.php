@@ -28,6 +28,16 @@ Route::prefix('/mqtt')->group(function () {
 
 });
 
+Route::prefix('/secure')->group(function () {
+
+    Route::get('/', 'Api\SecureApi@index');
+
+    Route::get('/state', 'Api\SecureApi@state');
+
+    Route::post('/post', 'Api\SecureApi@post');
+
+});
+
 Route::any('/alice', 'AliceController@index');
 
 Route::any('/greenhouse', 'MqttHistoryController@get');
