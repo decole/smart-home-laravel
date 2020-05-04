@@ -100,9 +100,7 @@ class MqttSensor extends Model
         $sensor->to_condition   = $request->get('to_condition');
         //$sensor->notifying    = DataService::getCheckboxValue('notifying', $request);
         //$sensor->active       = DataService::getCheckboxValue('active', $request);
-
         return $sensor;
-
     }
 
 }

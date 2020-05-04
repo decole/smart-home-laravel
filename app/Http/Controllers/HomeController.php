@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 
+use App\MqttFireSecure;
+use App\MqttHistoryFireSecure;
+use App\MqttHistorySecure;
+use App\MqttHistoryWatering;
 use App\MqttRelay;
+use App\MqttSecure;
 use App\MqttSensor;
 use App\Notifications\UserNotify;
 use App\Services\WateringService;
@@ -62,33 +67,40 @@ class HomeController extends Controller
     public function allData()
     {
         return view('page.all_data', [
-            'relays' => MqttRelay::where('active', 'true')->get(),//MqttRelay::all(),
+            'relays' => MqttRelay::where('active', 'true')->get(),
             'sensors' => MqttSensor::all(),
         ]);
     }
 
     public function secure()
     {
-        return view('page.secure');
+        $secSensors = MqttSecure::all();
+        $history = MqttHistorySecure::orderBy('created_at', 'desc')->paginate(7);
+
+        return view('page.secure', [
+            'sensors' => $secSensors,
+            'history' => $history,
+        ]);
     }
 
     public function firesecure()
     {
-        return view('page.firesecure');
+        $fireSensors = MqttFireSecure::all();
+        $history = MqttHistoryFireSecure::orderBy('created_at', 'desc')->paginate(7);
+        return view('page.firesecure', [
+            'sensors' => $fireSensors,
+            'history' => $history,
+        ]);
     }
 
     public function watering()
     {
-        $waterTopics = MqttRelay::where('type', '=', '8')
-            ->where('location', '=', '4')
-            ->orderBy('id', 'asc')
-            ->get();
-
         $state = (new WateringService)->getStateOnSite();
+        $history = MqttHistoryWatering::orderBy('created_at', 'desc')->paginate(7);
 
         return view('page.autowattering', [
-            'swifts' => $waterTopics,
             'state'  => $state,
+            'history' => $history,
         ]);
     }
 
@@ -101,6 +113,12 @@ class HomeController extends Controller
 
     public function contacts()
     {
+        $model1 = new MqttHistoryWatering();
+        $model2 = new MqttHistorySecure();
+        $model3 = new MqttHistoryFireSecure();
+        $model3->value = $model2->value = $model1->value = 'lol';
+        $model3->topic = $model2->topic = $model1->topic = 'test';
+        $model1->save(); $model2->save(); $model3->save();
         return view('page.contacts');
     }
 
