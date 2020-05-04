@@ -12,18 +12,18 @@
         <div class="container-fluid">
     <div class="row">
         <!-- Left col -->
-        <section class="col-lg-6 col-xs-12 connectedSortable">
+        {{--<section class="col-lg-6 col-xs-12 connectedSortable">--}}
             @foreach($relays as $swift)
                 @include('snippet.relay_v1', ['swift', $swift])
             @endforeach
-        </section>
+        {{--</section>--}}
         <!-- /.Left col -->
         <!-- Right col -->
-        <section class="col-lg-6 col-xs-12 connectedSortable">
+        {{--<section class="col-lg-6 col-xs-12 connectedSortable">--}}
             @foreach($sensors as $sensor)
                 @include('snippet.sensor', ['sensor', $sensor])
             @endforeach
-        </section>
+        {{--</section>--}}
     </div>
 
 @endsection

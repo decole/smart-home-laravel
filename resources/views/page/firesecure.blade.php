@@ -3,6 +3,7 @@
 
 @section('footer-scripts')
     @parent
+    <script src="{{ asset("js/fire_secure.js") }}"></script>
 @endsection
 
 @section('content')
@@ -28,29 +29,32 @@
                                         <thead>
                                         <tr>
                                             <th>Датчик</th>
-                                            <th>Состояние</th>
-                                            <th style="width: 30px">Статус</th>
+                                            <th class="text-center">Состояние</th>
+                                            <th class="text-center" style="width: 30px">Статус</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                        @foreach($sensors as $sensor)
                                         <tr>
-                                            <td>[ ППК-1 ] - дом</td>
-                                            <td>Работает</td>
-                                            <td class="text-right py-0 align-middle">
-                                                <div class="btn-group btn-group-sm">
-                                                    <a href="#" class="btn btn-outline-success active"><i class="fas fa-lightbulb"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr><tr>
-                                            <td>[ ППК-2 ] - пристройка</td>
-                                            <td>Работает</td>
-                                            <td class="text-right py-0 align-middle">
-                                                <div class="btn-group btn-group-sm">
-                                                    <a href="#" class="btn btn-outline-danger active"><i class="fas fa-fire"></i></a>
+                                            <td>[ ППК-{{ $sensor->id }} ] - {{ $sensor->name }}</td>
+                                            <td class="text-center">Работает</td>
+                                            <td class="text-center py-0 align-middle">
+                                                <div class="btn-group btn-group-sm fire-sensor-control" data-secstate-topic="{{ $sensor->topic }}" data-secstate-id="{{ $sensor->id }}" data-condition-normal="{{ $sensor->normal_condition }}" data-condition-alarm="{{ $sensor->alarm_condition }}">
+                                                    <a class="btn btn-outline-success"><i class="fas fa-lightbulb"></i></a>
+                                                    <a style="display: none;" class="btn btn-outline-danger"><i class="fas fa-fire"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endforeach
+                                        {{--<tr>--}}
+                                            {{--<td>[ ППК-2 ] - пристройка</td>--}}
+                                            {{--<td>Работает</td>--}}
+                                            {{--<td class="text-right py-0 align-middle">--}}
+                                                {{--<div class="btn-group btn-group-sm">--}}
+                                                    {{--<a href="#" class="btn btn-outline-danger active"><i class="fas fa-fire"></i></a>--}}
+                                                {{--</div>--}}
+                                            {{--</td>--}}
+                                        {{--</tr>--}}
 
                                         </tbody>
                                     </table>
@@ -73,34 +77,24 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th style="width: 140px;">Дата</th>
+                                        <th>Дата</th>
                                         <th>Событие</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>21.04.2020 07:31</td>
-                                        <td>ППК-1 сработка</td>
-                                    </tr><tr>
-                                        <td>21.04.2020 08:19</td>
-                                        <td>ППК-1 - не отвечает</td>
-                                    </tr><tr>
-                                        <td>21.04.2020 12:07</td>
-                                        <td>ППК-2 - не отвечает</td>
-                                    </tr>
-
-
+                                    @foreach($history as $moment)
+                                        <tr>
+                                            <td>{{ $moment->created_at }}</td>
+                                            <td>{{ $moment->topic }} - {{ $moment->value }}</td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
-                                    <ul class="pagination pagination-sm m-0 float-right">
-                                        <li class="page-item"><a class="page-link" href="#">«</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">»</a></li>
-                                    </ul>
+                                    @if($history)
+                                        {!! $history->render() !!}
+                                    @endif
                                 </div>
                             </div>
                             <!-- /.card -->

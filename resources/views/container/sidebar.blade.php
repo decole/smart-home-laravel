@@ -157,6 +157,14 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('weight.index') }}" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Вес
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

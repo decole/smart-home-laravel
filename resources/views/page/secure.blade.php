@@ -3,14 +3,7 @@
 
 @section('footer-scripts')
     @parent
-    <script src="{{ asset("plugins/bootstrap-switch/js/bootstrap-switch.min.js") }}"></script>
-    <script>
-    $(function () {
-        $("input[data-bootstrap-switch]").each(function(){
-            $(this).bootstrapSwitch('state', $(this).prop('checked'));
-        });
-    });
-    </script>
+    <script src="{{ asset("js/secure.js") }}"></script>
 @endsection
 
 @section('content')
@@ -36,48 +29,30 @@
                                 <thead>
                                 <tr>
                                     <th>Датчик</th>
-                                    <th>Состояние</th>
-                                    <th>Команда</th>
+                                    <th class="text-center">Состояние</th>
+                                    <th class="text-center">Команда</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                @foreach($sensors as $sensor)
                                 <tr>
-                                    <td>[ ОШС-1 ] - холодная прихожка</td>
-                                    <td>Не взведен</td>
-                                    <td class="text-right py-0 align-middle">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-outline-danger"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="btn btn-outline-success active"><i class="fas fa-eye-slash"></i></a>
+                                    <td>[ ОШС-{{ $sensor->id }} ] - {{ $sensor->name }}</td>
+                                    <td class="text-center secure-sensor-state-text">
+                                        @if( $sensor->trigger )Взведен
+                                        @endif
+                                        @if( !$sensor->trigger )Не взведен
+                                        @endif
+                                    </td>
+                                    <td class="text-center py-0 align-middle">
+                                        <div class="btn-group btn-group-sm secure-sensor-control" data-secstate-topic="{{ $sensor->topic }}">
+                                            <a class="btn secure-trigger-on  btn-outline-danger @if( $sensor->trigger ) active @endif"><i class="fas fa-eye"></i></a>
+                                            <a class="btn secure-trigger-off btn-outline-success @if( !$sensor->trigger ) active @endif"><i class="fas fa-eye-slash"></i></a>
+                                            <a class="btn secure-state-info btn-outline-info active">.</a>
                                         </div>
                                     </td>
-                                </tr><tr>
-                                    <td>[ ОШС-1 ] - холодная прихожка</td>
-                                    <td>Взведен</td>
-                                    <td class="text-right py-0 align-middle">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-outline-secondary active"><i class="fas fa-lock"></i></a>
-                                            <a href="#" class="btn btn-outline-secondary"><i class="fas fa-lock-open"></i></a>
-                                        </div>
-                                    </td>
-                                </tr><tr>
-                                    </tr><tr>
-                                    <td>[ ОШС-1 ] - холодная прихожка</td>
-                                    <td>Взведен</td>
-                                    <td class="text-right py-0 align-middle">
-                                        <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="success" data-on-color="danger">
-                                    </td>
-                                </tr><tr>
-                                    <td>[ ОШС-1 ] - холодная прихожка</td>
-                                    <td>Взведен</td>
-                                    <td class="text-right py-0 align-middle">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-outline-danger active"><i class="fas fa-key"></i></a>
-                                            <a href="#" class="btn btn-outline-danger"><i class="fas fa-ban"></i></a>
-                                        </div>
-                                    </td>
-
-                                </tr></tbody>
+                                </tr>
+                                @endforeach
+                                </tbody>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -98,38 +73,24 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th style="width: 10px">#</th>
                                 <th>Дата</th>
                                 <th>Событие</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>21.04.2020 07:31</td>
-                                <td>ОШС-1 взведен</td>
-                            </tr><tr>
-                                <td>2.</td>
-                                <td>21.04.2020 08:19</td>
-                                <td>ОШС-1 - детектирование движения</td>
-                            </tr><tr>
-                                <td>3.</td>
-                                <td>21.04.2020 12:07</td>
-                                <td>ОШС-1 - детектирование движения</td>
-                            </tr>
-
-
+                            @foreach($history as $moment)
+                                <tr>
+                                    <td>{{ $moment->created_at }}</td>
+                                    <td>{{ $moment->topic }} - {{ $moment->value }}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
-                            <ul class="pagination pagination-sm m-0 float-right">
-                                <li class="page-item"><a class="page-link" href="#">«</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">»</a></li>
-                            </ul>
+                            @if($history)
+                                {!! $history->render() !!}
+                            @endif
                         </div>
                     </div>
                     <!-- /.card -->
