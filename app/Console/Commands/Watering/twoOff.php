@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Watering;
 
 
+use App\Services\WateringService;
 use Illuminate\Console\Command;
 
 class twoOff extends Command
@@ -40,6 +41,10 @@ class twoOff extends Command
     public function handle()
     {
         $this->info('two-Off');
+        $watering = new WateringService();
+        $watering->turnOff('water/major');
+        sleep(0.5);
+        $watering->turnOff('water/2');
     }
 
 }

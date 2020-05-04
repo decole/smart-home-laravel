@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Watering;
 
 
+use App\Services\WateringService;
 use Illuminate\Console\Command;
 
 class threeOn extends Command
@@ -39,7 +40,14 @@ class threeOn extends Command
      */
     public function handle()
     {
-        $this->info('three-On');
+        $watering = new WateringService();
+        $watering->turnOn('water/3');
+        sleep(0.5);
+        $watering->turnOn('water/major');
+        sleep(0.3);
+        $watering->turnOff('water/2');
+        sleep(0.3);
+        $watering->turnOff('water/1');
     }
 
 }

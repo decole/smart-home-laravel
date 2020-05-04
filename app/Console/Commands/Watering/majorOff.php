@@ -52,13 +52,13 @@ class majorOff extends Command
     {
         $watering = new WateringService();
         $watering->turnOff('water/major');
-        sleep(0.3);
+        sleep(0.5);
         $watering->turnOff('water/1');
-        sleep(0.2);
+        sleep(0.3);
         $watering->turnOff('water/2');
-        sleep(0.2);
+        sleep(0.3);
         $watering->turnOff('water/3');
-        sleep(0.2);
+        sleep(0.3);
     }
 
 }
