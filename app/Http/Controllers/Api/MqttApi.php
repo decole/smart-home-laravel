@@ -35,7 +35,6 @@ class MqttApi extends Controller
         $topic = $request->input('topic');
         return [
             'payload' => MqttService::getCacheMqtt($topic),
-//            'payload' => 'on',
         ];
     }
 
