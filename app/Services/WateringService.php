@@ -68,11 +68,11 @@ class WateringService extends BaseController
         /** @var Schedule $value */
         foreach ($this->schedule as $value) {
             if ($value->command == $scheduleData['start']) {
-                $scheduleData['start_time'] = $value->next_run;
+                $scheduleData['start_time'] = \Carbon\Carbon::parse($value->next_run)->format('d.m.Y H:m');
                 $scheduleData['start_time_job_id'] = $value->id;
             }
             if ($value->command == $scheduleData['end']) {
-                $scheduleData['end_time'] = $value->next_run;
+                $scheduleData['end_time'] = \Carbon\Carbon::parse($value->next_run)->format('d.m.Y H:m');
                 $scheduleData['end_time_job_id'] = $value->id;
             }
         }
@@ -107,6 +107,11 @@ class WateringService extends BaseController
     public function turnOn($topic)
     {
         if(self::validateTopic($topic)) {
+            if (self::waterLeakage()) {
+                try { (new TelegramService())->sendDecole('Зафиксирована протечка. Не могу включить клапан - ' . $topic); }
+                catch (TelegramException $e) { }
+                return false;
+            }
 //            $mqtt = new MqttService();
             (self::getPayloadCommandOn($topic) === null) ? $payload = 1 : $payload = self::getPayloadCommandOn($topic);
 //            $mqtt->post($topic, $payload);
@@ -174,6 +179,11 @@ class WateringService extends BaseController
         try { (new TelegramService())->sendDecole('Топик автополива не настроен - ' . $topic); }
         catch (TelegramException $e) { }
         return null;
+    }
+
+    public function waterLeakage()
+    {
+        return false;
     }
 
 }

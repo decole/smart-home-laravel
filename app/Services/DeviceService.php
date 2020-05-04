@@ -13,9 +13,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 
-class DeviceService
+final class DeviceService
 {
-
     /**
      * @var SensorValidate
      */
@@ -35,7 +34,7 @@ class DeviceService
      */
     private $secure;
     protected $secure_list = 'secure_list';
-    protected $secure_model = 'secures';
+    protected static $secure_model = 'secures';
 
     /**
      * @var FireSecureValidate
@@ -51,7 +50,7 @@ class DeviceService
 
         $this->sensor     = new SensorValidate($this->sensor_list, $this->sensor_model);
         $this->relay      = new RelayValidate($this->relay_list, $this->relay_model);
-        $this->secure     = new SecureValidate($this->secure_list, $this->secure_model);
+        $this->secure     = new SecureValidate($this->secure_list, self::$secure_model);
         $this->fireSecure = new FireSecureValidate($this->fireSecure_list, $this->fireSecure_model);
     }
 
@@ -89,7 +88,7 @@ class DeviceService
         Cache::forget($this->relay_model);
 
         Cache::forget($this->secure_list);
-        Cache::forget($this->secure_model);
+        Cache::forget(self::$secure_model);
 
         Cache::forget($this->fireSecure_list);
         Cache::forget($this->fireSecure_model);
@@ -146,4 +145,9 @@ class DeviceService
         }
     }
 
+    public static function getSecureModel()
+    {
+        $secure_model = self::$secure_model;
+        return Cache::get($secure_model);
+    }
 }
