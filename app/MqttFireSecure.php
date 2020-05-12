@@ -118,4 +118,18 @@ class MqttFireSecure extends Model
 
     }
 
+    /**
+     * @param string $topic
+     * @param string $value
+     */
+    public static function logChangeTrigger(string $topic, string $value)
+    {
+        $model = new MqttHistoryFireSecure();
+        $model->topic = $topic;
+        $model->value = $value;
+        $model->save();
+    }
+
+
+
 }

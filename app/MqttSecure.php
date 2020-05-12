@@ -96,6 +96,7 @@ class MqttSecure extends Model
     public static function updateSecureSensor($id, \Illuminate\Http\Request $request)
     {
         $sensor = self::find($id);
+        self::logChangeTrigger($sensor->topic, DataService::getCheckboxValue('trigger', $request));
         $sensor->collecting($sensor, $request);
         $sensor->save();
     }
@@ -126,4 +127,29 @@ class MqttSecure extends Model
         return $sensor;
 
     }
+
+    /**
+     * @param $topic
+     * @param $trigger
+     */
+    public static function logChangeTrigger(string $topic, bool $trigger)
+    {
+        $model = new MqttHistorySecure();
+        $model->topic = $topic;
+        $model->value = $trigger ? 'взведен' : 'отмена взведения';
+        $model->save();
+    }
+
+    /**
+     * @param string $topic
+     * @param string $value
+     */
+    public static function logAlarm(string $topic, string $value)
+    {
+        $model = new MqttHistorySecure();
+        $model->topic = $topic;
+        $model->value = $value;
+        $model->save();
+    }
+
 }

@@ -112,9 +112,10 @@ class WateringService extends BaseController
                 catch (TelegramException $e) { }
                 return false;
             }
-//            $mqtt = new MqttService();
+            MqttRelay::logChangeState($topic, 'включен (планировщик)');
+            $mqtt = new MqttService();
             (self::getPayloadCommandOn($topic) === null) ? $payload = 1 : $payload = self::getPayloadCommandOn($topic);
-//            $mqtt->post($topic, $payload);
+            $mqtt->post($topic, $payload);
             echo $topic . ' - ' . $payload . PHP_EOL;
             return true;
         }
@@ -129,9 +130,10 @@ class WateringService extends BaseController
     {
         echo $topic . PHP_EOL;
         if(self::validateTopic($topic)) {
-//            $mqtt = new MqttService();
+            MqttRelay::logChangeState($topic, 'выключен (планировщик)');
+            $mqtt = new MqttService();
             (self::getPayloadCommandOn($topic) === null) ? $payload = 0 : $payload = self::getPayloadCommandOff($topic);
-//            $mqtt->post($topic, $payload);
+            $mqtt->post($topic, $payload);
             echo $topic . ' - ' . $payload . PHP_EOL;
             return true;
         }

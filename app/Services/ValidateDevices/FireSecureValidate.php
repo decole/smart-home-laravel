@@ -71,6 +71,7 @@ class FireSecureValidate implements DeviceInterface
         foreach ($model as $value) {
             if ($value['topic'] == $message->topic) {
                 if ($value['alarm_condition'] == $message->payload) {
+                    MqttFireSecure::logChangeTrigger($message->topic,'зафиксирован статус - пожар');
                     $text = DataService::getTextNotify($value['message_warn'], (string)$message->payload);
                     DeviceService::SendNotify(new FireSecureNotify($text, $message));
                 }

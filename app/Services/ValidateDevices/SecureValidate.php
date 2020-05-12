@@ -3,7 +3,9 @@
 namespace App\Services\ValidateDevices;
 
 
+use App\MqttFireSecure;
 use App\MqttSecure;
+use App\MqttSensor;
 use App\Notifications\SecureNotify;
 use App\Services\DataService;
 use App\Services\DeviceService;
@@ -74,6 +76,7 @@ class SecureValidate implements DeviceInterface
                     $value['trigger'] == true &&
                     DeviceService::is_notifying($value)
                 ) {
+                    MqttSecure::logAlarm($value['topic'], 'зафиксировано движение');
                     if ($value['notifying'] == true) {
                         $text = DataService::getTextNotify($value['message_warn'], (string)$message->payload);
                         DeviceService::SendNotify(new SecureNotify($text, $message));

@@ -165,6 +165,15 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('failed_jobs') }}" class="nav-link">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <p>
+                                    Дефект заданий
+                                </p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
             </ul>

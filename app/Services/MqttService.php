@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 use App\MqttHistory;
+use App\MqttRelay;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
@@ -88,9 +89,7 @@ final class MqttService
     public function post($topic, $data)
     {
         $this->client->publish($topic, $data, 1, 0);
-
         return $data;
-
     }
 
     /**

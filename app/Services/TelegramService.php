@@ -92,7 +92,6 @@ class TelegramService extends BaseController
         } catch (TelegramException $e) {
             return $e;
         }
-
     }
 
     /**

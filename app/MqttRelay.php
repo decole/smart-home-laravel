@@ -134,4 +134,12 @@ class MqttRelay extends Model
         return $sensor;
     }
 
+    public static function logChangeState($topic, $value)
+    {
+        $model = new MqttHistoryWatering();
+        $model->topic = $topic;
+        $model->value = $value;
+        $model->save();
+    }
+
 }

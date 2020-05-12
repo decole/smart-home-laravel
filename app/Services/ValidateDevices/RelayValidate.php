@@ -92,6 +92,7 @@ class RelayValidate implements DeviceInterface
         foreach ($model as $value) {
             if ($value['topic'] == $message->topic) {
                 if (DeviceService::is_active($value) == false) {
+                    MqttRelay::logChangeState($message->topic, 'на деактивированный топик пришла комманда');
                     $notify = 'на деактивированный топик ' . $message->topic . ' пришла комманда {value}';
                     DeviceService::SendNotify(new RelayNotify($notify, $message));
                     break;
@@ -102,6 +103,14 @@ class RelayValidate implements DeviceInterface
                     $relay = MqttRelay::where('topic', $message->topic)->first();
                     $relay->last_command = $payload;
                     $relay->save();
+                    if ($relay->type == 8) {
+                        if ( $value['command_on'] == $payload ) {
+                            MqttRelay::logChangeState($message->topic, 'включен - прямая команда');
+                        }
+                        if ( $value['command_off'] == $payload ) {
+                            MqttRelay::logChangeState($message->topic, 'выключен - прямая команда');
+                        }
+                    }
                     self::createDataset();
                 }
                 break;
