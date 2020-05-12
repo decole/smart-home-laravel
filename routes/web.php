@@ -26,7 +26,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/margulis', 'HomeController@margulis')->name('margulis');
 
-Route::get('/all-data', 'HomeController@allData')->name('all-data');
+Route::get('/all_data', 'HomeController@allData')->name('all-data');
 
 Route::get('/secure_system', 'HomeController@secure')->name('secure_system');
 
@@ -39,6 +39,10 @@ Route::get('/settings', 'HomeController@settings')->name('settings');
 Route::get('/contacts', 'HomeController@contacts')->name('contacts');
 
 Route::get('/messages', 'HomeController@messages')->name('messages');
+
+Route::get('/failed_jobs', 'HomeController@failedJobs')->name('failed_jobs');
+
+Route::get('/failed_jobs_destroy', 'HomeController@destroyFailedJobs')->name('failed_jobs_destroy');
 
 Route::resource('/sensors', 'MqttSensorController');
 

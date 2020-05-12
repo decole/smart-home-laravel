@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\FailedJob;
 use App\MqttFireSecure;
 use App\MqttHistoryFireSecure;
 use App\MqttHistorySecure;
@@ -35,9 +36,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-//        $comment = 'Это сообщение отправлено из формы обратной связи';
-        //Notification::send(Auth::user(), new UserNotify($comment));
-
         return view('index', [
             'success' => Auth::user()->email,
         ]);
@@ -72,6 +70,9 @@ class HomeController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function secure()
     {
         $secSensors = MqttSecure::all();
@@ -83,6 +84,9 @@ class HomeController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function firesecure()
     {
         $fireSensors = MqttFireSecure::all();
@@ -93,6 +97,9 @@ class HomeController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function watering()
     {
         $state = (new WateringService)->getStateOnSite();
@@ -104,32 +111,54 @@ class HomeController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function settings()
     {
-        return view('page.settings', [
-            'relays' => MqttRelay::where('topic', 'margulis/lamp01')->first(),
-        ]);
+        return view('page.settings');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function contacts()
     {
-        $model1 = new MqttHistoryWatering();
-        $model2 = new MqttHistorySecure();
-        $model3 = new MqttHistoryFireSecure();
-        $model3->value = $model2->value = $model1->value = 'lol';
-        $model3->topic = $model2->topic = $model1->topic = 'test';
-        $model1->save(); $model2->save(); $model3->save();
+//        $model1 = new MqttHistoryWatering();
+//        $model2 = new MqttHistorySecure();
+//        $model3 = new MqttHistoryFireSecure();
+//        $model3->value = $model2->value = $model1->value = 'lol';
+//        $model3->topic = $model2->topic = $model1->topic = 'test';
+//        $model1->save(); $model2->save(); $model3->save();
         return view('page.contacts');
     }
 
-    public function notifications()
-    {
-        return view('page.notifications');
-    }
-
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function messages()
     {
         return view('page.messages');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function failedJobs()
+    {
+        $model = FailedJob::all();
+        return view('crud.failed_job.index', [
+            'notifications' => $model,
+        ]);
+    }
+
+    /**
+     *
+     */
+    public function destroyFailedJobs()
+    {
+        FailedJob::truncate();
+        return back()->with('success', 'failed jobs truncated');
     }
 
 }
