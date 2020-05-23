@@ -3,11 +3,6 @@
 
 namespace App\Http\Controllers;
 
-//use App\Alice;
-//use App\AliceSecure;
-//use App\Helpers\MqttHelper;
-//use App\Helpers\TelegramHelper;
-//use App\Weather;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use function GuzzleHttp\Promise\all;
@@ -38,29 +33,18 @@ class AliceController extends Controller
         $this->isAdmin = false;
         $this->text = '';
         $this->ttl = '';
-
-
     }
 
     public function index(Request $request)
     {
-        //Log::debug($request->getContent()); @Todo для дебагинга
-
-        //dd($request->getContent());
-        /*
-        dd($request->json()->all());
-        */
         $request_json = $request->json()->get('session');
-
         $this->message_id = $request_json["message_id"];
         $this->session_id = $request_json["session_id"];
         $this->skill_id = $request_json["skill_id"];
         $this->user_id = $request_json["user_id"];
         $this->new = $request_json["new"];
 
-
-
-        //$this->process([]);
+        //$this->process($request_json);
 
         $this->text = 'test';
         $this->ttl = 'test';
@@ -81,9 +65,7 @@ class AliceController extends Controller
             'version' => '1.0',
         ];
 
-
         return response()->json($arrayToEncode);
-
     }
 
     /**
@@ -110,7 +92,6 @@ class AliceController extends Controller
 //            }
 //        }
         return $this->hello($apiRequestArray);
-
     }
 
     /**

@@ -3,7 +3,6 @@
 
 namespace App\Services\ValidateDevices;
 
-
 interface DeviceInterface
 {
 
