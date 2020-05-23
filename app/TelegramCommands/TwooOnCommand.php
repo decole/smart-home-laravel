@@ -10,8 +10,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Helpers\MqttHelper;
-use App\Helpers\WateringHelper;
+
+use App\Services\WateringService;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -36,7 +36,7 @@ class TwooOnCommand extends UserCommand
     /**
      * @var string
      */
-    protected $description = 'Данные по сенсорам';
+    protected $description = 'Включение второго клапана';
 
     /**
      * @var string
@@ -59,12 +59,14 @@ class TwooOnCommand extends UserCommand
         $message      = $this->getMessage();
         $chat_id      = $message->getChat()->getId();
 
-        $mqtt = new WateringHelper();
-        $mqtt->TwoOn();
+        $mqtt = new WateringService();
+        $mqtt->turnOn('water/2');
+        sleep(0.5);
+        $mqtt->turnOn('water/major');
 
         $data = [
             'chat_id' => $chat_id,
-            'text'    => 'ok' . ' laravel',
+            'text'    => 'выполнено',
         ];
 
         return Request::sendMessage($data);

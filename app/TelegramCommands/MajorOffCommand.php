@@ -10,7 +10,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Helpers\MqttHelper;
+
+use App\Services\WateringService;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -25,22 +26,22 @@ use Longman\TelegramBot\TelegramLog;
  * Get weather info for any place.
  * This command requires an API key to be set via command config.
  */
-class WateringCommand extends UserCommand
+class MajorOffCommand extends UserCommand
 {
     /**
      * @var string
      */
-    protected $name = 'watering';
+    protected $name = 'majorOff';
 
     /**
      * @var string
      */
-    protected $description = 'Данные по сенсорам';
+    protected $description = 'Выключение главного клапана';
 
     /**
      * @var string
      */
-    protected $usage = '/watering';
+    protected $usage = '/majorOff';
 
     /**
      * @var string
@@ -57,20 +58,13 @@ class WateringCommand extends UserCommand
     {
         $message      = $this->getMessage();
         $chat_id      = $message->getChat()->getId();
-        $text = 'Умный полив:'.PHP_EOL.PHP_EOL
-            .'/majorOn'.PHP_EOL.PHP_EOL
-            .'/majorOff'.PHP_EOL.PHP_EOL
-            .'/oneOn'.PHP_EOL.PHP_EOL
-            .'/oneOff'.PHP_EOL.PHP_EOL
-            .'/twooOn'.PHP_EOL.PHP_EOL
-            .'/twooOff'.PHP_EOL.PHP_EOL
-            .'/twooOff'.PHP_EOL.PHP_EOL
-            .'/threeOn'.PHP_EOL.PHP_EOL
-            .'/threeOff'.PHP_EOL.PHP_EOL . ' laravel';
+
+        $mqtt = new WateringService();
+        $mqtt->turnOff('water/major');
 
         $data = [
             'chat_id' => $chat_id,
-            'text'    => $text,
+            'text'    => 'выполнено',
         ];
 
         return Request::sendMessage($data);

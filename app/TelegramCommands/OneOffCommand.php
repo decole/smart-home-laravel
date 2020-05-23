@@ -10,15 +10,15 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Helpers\MqttHelper;
-use App\Helpers\WateringHelper;
+
+use App\Services\WateringService;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\DB;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\TelegramLog;
+
 
 /**
  * User "/weather" command
@@ -26,22 +26,22 @@ use Longman\TelegramBot\TelegramLog;
  * Get weather info for any place.
  * This command requires an API key to be set via command config.
  */
-class MajorOnCommand extends UserCommand
+class OneOffCommand extends UserCommand
 {
     /**
      * @var string
      */
-    protected $name = 'majorOn';
+    protected $name = 'oneOff';
 
     /**
      * @var string
      */
-    protected $description = 'Данные по сенсорам';
+    protected $description = 'Выключение первого клапана';
 
     /**
      * @var string
      */
-    protected $usage = '/majorOn';
+    protected $usage = '/oneOff';
 
     /**
      * @var string
@@ -58,12 +58,15 @@ class MajorOnCommand extends UserCommand
     {
         $message      = $this->getMessage();
         $chat_id      = $message->getChat()->getId();
-        $mqtt = new WateringHelper();
-        $mqtt->MajorOn();
+
+        $mqtt = new WateringService();
+        $mqtt->turnOff('water/major');
+        sleep(0.5);
+        $mqtt->turnOff('water/1');
 
         $data = [
             'chat_id' => $chat_id,
-            'text'    => 'ok' . 'laravel',
+            'text'    => 'выполнено',
         ];
 
         return Request::sendMessage($data);

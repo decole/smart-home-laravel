@@ -10,8 +10,10 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Helpers\MqttHelper;
-use App\Helpers\WateringHelper;
+
+use App\Schedule;
+use App\Services\WateringService;
+use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -26,22 +28,22 @@ use Longman\TelegramBot\TelegramLog;
  * Get weather info for any place.
  * This command requires an API key to be set via command config.
  */
-class ThreeOnCommand extends UserCommand
+class DiagnosticCommand extends UserCommand
 {
     /**
      * @var string
      */
-    protected $name = 'threeOn';
+    protected $name = 'diagnostic';
 
     /**
      * @var string
      */
-    protected $description = 'Данные по сенсорам';
+    protected $description = 'Запуск самодиагностики умного дома и внутренних систем';
 
     /**
      * @var string
      */
-    protected $usage = '/threeOn';
+    protected $usage = '/diagnostic';
 
     /**
      * @var string
@@ -59,12 +61,16 @@ class ThreeOnCommand extends UserCommand
         $message      = $this->getMessage();
         $chat_id      = $message->getChat()->getId();
 
-        $mqtt = new WateringHelper();
-        $mqtt->ThreeOn();
+        /** @var Schedule $model */
+        $model = Schedule::find(12);
+        $lastRunDate = new DateTime('NOW');
+        $model->next_run = $lastRunDate->format('Y-m-d H:i:00');
+        $model->interval = null;
+        $model->save();
 
         $data = [
             'chat_id' => $chat_id,
-            'text'    => 'ok' . ' laravel',
+            'text'    => 'Самодиагностика запланирована в менеджере задач',
         ];
 
         return Request::sendMessage($data);

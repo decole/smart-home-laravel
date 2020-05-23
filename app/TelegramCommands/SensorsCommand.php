@@ -59,8 +59,9 @@ class SensorsCommand extends UserCommand
         $chat_id      = $message->getChat()->getId();
         $text         = '';
 
-        $mqtt = new MqttHelper();
-        $text = $mqtt->sensorStatus('telegram');
+        // @Todo заиметь функционал для отправки состояния сенсоров + отдельно для теплицы
+        //$mqtt = new MqttHelper();
+        //$text = $mqtt->sensorStatus('telegram');
 
         $data = [
             'chat_id' => $chat_id,

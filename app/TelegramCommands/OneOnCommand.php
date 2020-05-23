@@ -10,9 +10,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Helpers\MqttHelper;
-use App\Helpers\SmartHomeHelper;
-use App\Helpers\WateringHelper;
+
+use App\Services\WateringService;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -27,22 +26,22 @@ use Longman\TelegramBot\TelegramLog;
  * Get weather info for any place.
  * This command requires an API key to be set via command config.
  */
-class LampOffCommand extends UserCommand
+class OneOnCommand extends UserCommand
 {
     /**
      * @var string
      */
-    protected $name = 'lampOff';
+    protected $name = 'oneOn';
 
     /**
      * @var string
      */
-    protected $description = 'Выключить лампу';
+    protected $description = 'Включение первого клапана';
 
     /**
      * @var string
      */
-    protected $usage = '/lampOff';
+    protected $usage = '/oneOn';
 
     /**
      * @var string
@@ -60,12 +59,14 @@ class LampOffCommand extends UserCommand
         $message      = $this->getMessage();
         $chat_id      = $message->getChat()->getId();
 
-        $mqtt = new SmartHomeHelper();
-        $mqtt->Lamp01Off();
+        $mqtt = new WateringService();
+        $mqtt->turnOn('water/1');
+        sleep(0.5);
+        $mqtt->turnOn('water/major');
 
         $data = [
             'chat_id' => $chat_id,
-            'text'    => 'Лампа выключена.Бот',
+            'text'    => 'выполнено',
         ];
 
         return Request::sendMessage($data);
