@@ -64,8 +64,9 @@ class FireSecureValidate implements DeviceInterface
      */
     public function deviceValidate($message)
     {
-        if (!Cache::has($this->topicModel)) {
+        if (!Cache::has($this->topicModel) || is_null(Cache::get($this->topicModel)) ) {
             self::createDataset();
+            sleep(0.5);
         }
         $model = Cache::get($this->topicModel);
         foreach ($model as $value) {
