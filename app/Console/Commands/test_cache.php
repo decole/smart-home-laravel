@@ -46,10 +46,10 @@ class test_cache extends Command
             $topic = $this->ask('Topic?');
         }
 
-
+/*
         $list = $this->mqtt->getCacheMqtt($topic);
         $this->info($list);
-
+*/
         /*
         $date = Carbon::now()->format('d-m-Y H:i:s');
         $this->info($date);

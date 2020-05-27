@@ -85,6 +85,7 @@ class test extends Command
         SendTelegramNotify::dispatch($text);
         SendEmail::dispatch($text);
 */
+/*
         $text = 'Критическое влажность в пристройе 10 %';
         $note = new UserNotify($text);
         $user = User::where('name', 'decole')->first();
@@ -107,6 +108,7 @@ class test extends Command
         if ($sendEmail) {
             $this->info('send notify');
         }
+*/
     }
 
 }

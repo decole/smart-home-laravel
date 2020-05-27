@@ -51,12 +51,8 @@ class SecureValidate implements DeviceInterface
     {
         $model = MqttSecure::all();
         $topics = $model->pluck('topic')->toArray();
-        Cache::rememberForever($this->topicModel, function () use ($model) {
-            return $model;
-        });
-        Cache::rememberForever($this->topicList, function () use ($topics) {
-            return $topics;
-        });
+        Cache::put($this->topicModel, $model);
+        Cache::put($this->topicList, $topics);
         return $topics;
     }
 
