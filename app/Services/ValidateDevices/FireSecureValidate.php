@@ -64,7 +64,21 @@ class FireSecureValidate implements DeviceInterface
             self::createDataset();
             sleep(0.5);
         }
+        // diagnostic and check
         $model = Cache::get($this->topicModel);
+        if(empty($model)) {
+            \Log::debug('$model is empty');
+            \Log::debug($message);
+            self::createDataset();
+            self::process($model, $message);
+        }
+        else {
+            self::process($model, $message);
+        }
+    }
+
+    private function process($model, $message)
+    {
         foreach ($model as $value) {
             if ($value['topic'] == $message->topic) {
                 if ($value['alarm_condition'] == $message->payload) {
