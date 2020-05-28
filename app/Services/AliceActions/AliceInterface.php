@@ -3,7 +3,6 @@
 
 namespace App\Services\AliceActions;
 
-
 interface AliceInterface
 {
 

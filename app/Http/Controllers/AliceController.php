@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AliceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use function GuzzleHttp\Promise\all;
@@ -19,6 +20,7 @@ class AliceController extends Controller
     private $session_id;
     private $skill_id;
     private $new;
+    private $dialog;
 
     public function __construct(Request $request)
     {
@@ -33,6 +35,8 @@ class AliceController extends Controller
         $this->isAdmin = false;
         $this->text = '';
         $this->ttl = '';
+
+        //$this->dialog = new AliceService();
     }
 
     public function index(Request $request)
