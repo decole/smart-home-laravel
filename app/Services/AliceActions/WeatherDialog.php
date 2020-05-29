@@ -3,19 +3,12 @@
 
 namespace App\Services\AliceActions;
 
-class HelloDialog implements AliceInterface
+class WeatherDialog implements AliceInterface
 {
 
     public function __construct()
     {
-    }
 
-    /**
-     * @inheritDoc
-     */
-    public function listVerb()
-    {
-        return ['тест', 'привет', 'test'];
     }
 
     /**
@@ -23,7 +16,7 @@ class HelloDialog implements AliceInterface
      */
     public function process($message)
     {
-        return 't';
+        // TODO: Implement process() method.
     }
 
     /**
@@ -33,5 +26,4 @@ class HelloDialog implements AliceInterface
     {
         // TODO: Implement verb() method.
     }
-
 }

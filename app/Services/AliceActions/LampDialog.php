@@ -3,11 +3,12 @@
 
 namespace App\Services\AliceActions;
 
-class HelloDialog implements AliceInterface
+class LampDialog implements AliceInterface
 {
 
     public function __construct()
     {
+
     }
 
     /**
@@ -15,7 +16,7 @@ class HelloDialog implements AliceInterface
      */
     public function listVerb()
     {
-        return ['тест', 'привет', 'test'];
+        // TODO: Implement listVerb() method.
     }
 
     /**
@@ -23,7 +24,7 @@ class HelloDialog implements AliceInterface
      */
     public function process($message)
     {
-        return 't';
+        // TODO: Implement process() method.
     }
 
     /**
