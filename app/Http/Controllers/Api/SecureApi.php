@@ -56,7 +56,6 @@ class SecureApi extends Controller
         $payload = $request->input('trigger');
         $model = MqttSecure::where('topic', $topic)->first();
         if ($model) {
-            $sensor = $model;
             $payload == 'on' ? $trigger = true : $trigger = false;
             /** @var MqttSecure $model */
             $model->trigger = $trigger;
