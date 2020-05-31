@@ -3,37 +3,57 @@
 
 namespace App\Services;
 
+use App\Services\AliceActions\DiagnosticDialog;
+use App\Services\AliceActions\FireSecureDialog;
 use App\Services\AliceActions\HelloDialog;
 use App\Services\AliceActions\LampDialog;
+use App\Services\AliceActions\PingDialog;
+use App\Services\AliceActions\SecureDialog;
+use App\Services\AliceActions\StatusDialog;
+use App\Services\AliceActions\WateringDialog;
+use App\Services\AliceActions\WeatherDialog;
 use Illuminate\Routing\Controller as BaseController;
 
 class AliceService extends BaseController
 {
+    /**
+     * @var null
+     */
     public $text;
     /**
-     * @var HelloDialog
+     * @var
      */
-    private $hello;
+    public $message;
     /**
-     * @var LampDialog
+     * @var
      */
-    private $lamp;
+    private $listing;
 
-    public function __construct()
+    public function __construct($request_json)
     {
-        $this->text = null;
-        $this->hello = new HelloDialog();
-        $this->lamp  = new LampDialog();
+        $this->text = 'Привет';
+        $this->message = $request_json;
+        $this->listing = [
+            'ping'     => new PingDialog(),
+            'hello'    => new HelloDialog(),
+            'lamp'     => new LampDialog(),
+            'weather'  => new WeatherDialog(),
+            'watering' => new WateringDialog(),
+            'secure'   => new SecureDialog(),
+            'diagnose' => new DiagnosticDialog(),
+            'status'   => new StatusDialog(),
+            'fire'     => new FireSecureDialog(),
+        ];
     }
 
     /**
-     * @param $message
      * @return void
      */
-    public function route($message)
+    public function route()
     {
-        if (is_array($message)) {
-            foreach ($message as $value)
+
+        if (is_array($this->message)) {
+            foreach ($this->message as $value)
             {
                 if(self::sorter($value)) {
                     break;
@@ -41,24 +61,26 @@ class AliceService extends BaseController
             }
         }
         else {
-            self::sorter($message);
+            self::sorter($this->message);
         }
     }
 
     private function sorter($verb)
     {
-        if (in_array( $verb, $this->hello->listVerb() )) { // вынести массив схождений внутри инициируемого класса
-            $this->text = $this->hello->process($verb);
-            return true;
+        foreach ($this->listing as $value) {
+            if (in_array( $verb, $value->listVerb() )) {
+                $this->text = $value->process($this->message);
+                return true;
+            }
         }
         return false;
     }
 
-    private function delete_value_in_array($value, $array)
-    {
-        if ( (($key = array_search($value, $array)) !== false) && (count($array) > 1) ) {
-            unset($array[$key]);
-        }
-        return $array;
-    }
+//    static public function delete_value_in_array($value, $array)
+//    {
+//        if ( (($key = array_search($value, $array)) !== false) && (count($array) > 1) ) {
+//            unset($array[$key]);
+//        }
+//        return $array;
+//    }
 }

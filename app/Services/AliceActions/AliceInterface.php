@@ -18,9 +18,9 @@ interface AliceInterface
     public function process($message);
 
     /**
-     * Генерация ответа
+     * Слова тригеры и их процессы
      * @param $message
-     * @return mixed
+     * @return void
      */
     public function verb($message);
 

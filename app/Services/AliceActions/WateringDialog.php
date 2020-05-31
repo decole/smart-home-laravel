@@ -3,12 +3,26 @@
 
 namespace App\Services\AliceActions;
 
+use App\Services\MqttService;
+
 class WateringDialog implements AliceInterface
 {
+    /**
+     * @var;
+     */
+    public $text;
 
     public function __construct()
     {
+        $this->text = 'Команда не распознана';
+    }
 
+    /**
+     * @inheritDoc
+     */
+    public function listVerb()
+    {
+        return ['шланг', 'шланга', 'вода', 'воды', 'воду'];
     }
 
     /**
@@ -16,7 +30,18 @@ class WateringDialog implements AliceInterface
      */
     public function process($message)
     {
-        // TODO: Implement process() method.
+        if (is_array($message)) {
+            foreach ($message as $value) {
+                self::verb($value);
+            }
+        }
+        else {
+            if(!empty($message)) {
+                self::verb($message);
+            }
+        }
+
+        return $this->text;
     }
 
     /**
@@ -24,6 +49,20 @@ class WateringDialog implements AliceInterface
      */
     public function verb($message)
     {
-        // TODO: Implement verb() method.
+        (in_array( $message, ['включить', 'включи', 'включай'] ))    ? self::turnOn() : null;
+        (in_array( $message, ['выключить', 'выключи', 'выключай'] )) ? self::turnOff() : null;
     }
+
+    private function turnOn()
+    {
+        (new MqttService())->post('water/major', '1');
+        $this->text = 'Шланг включен';
+    }
+
+    private function turnOff()
+    {
+        (new MqttService())->post('water/major', '0');
+        $this->text = 'Шланг выключен';
+    }
+
 }

@@ -8,14 +8,16 @@ class HelloDialog implements AliceInterface
 
     public function __construct()
     {
+
     }
 
     /**
      * @inheritDoc
+     * лист слов тригеров
      */
     public function listVerb()
     {
-        return ['тест', 'привет', 'test'];
+        return ['hello', 'привет'];
     }
 
     /**
@@ -23,7 +25,7 @@ class HelloDialog implements AliceInterface
      */
     public function process($message)
     {
-        return 't';
+        return 'Привет, это частный навык';
     }
 
     /**

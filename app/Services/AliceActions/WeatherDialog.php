@@ -3,12 +3,26 @@
 
 namespace App\Services\AliceActions;
 
+use App\Services\WeatherService;
+
 class WeatherDialog implements AliceInterface
 {
+    /**
+     * @var;
+     */
+    public $text;
 
     public function __construct()
     {
+        $this->text = 'У природы нет плохой погоды';
+    }
 
+    /**
+     * @inheritDoc
+     */
+    public function listVerb()
+    {
+        return ['погода', 'погоды', 'погоду'];
     }
 
     /**
@@ -16,7 +30,8 @@ class WeatherDialog implements AliceInterface
      */
     public function process($message)
     {
-        // TODO: Implement process() method.
+        self::verb($message);
+        return $this->text;
     }
 
     /**
@@ -24,6 +39,10 @@ class WeatherDialog implements AliceInterface
      */
     public function verb($message)
     {
-        // TODO: Implement verb() method.
+        $weather    = (new WeatherService())->getAcuweather();
+        $temp       = $weather['temperature'];
+        $spec       = $weather['spec'];
+        $this->text = 'Температура: ' . $temp . ' градусов, ' . $spec;
     }
+
 }

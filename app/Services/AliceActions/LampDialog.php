@@ -3,12 +3,19 @@
 
 namespace App\Services\AliceActions;
 
+use App\Console\Commands\mqtt;
+use App\Services\MqttService;
+
 class LampDialog implements AliceInterface
 {
+    /**
+     * @var;
+     */
+    public $text;
 
     public function __construct()
     {
-
+        $this->text = 'Команда не распознана';
     }
 
     /**
@@ -16,7 +23,7 @@ class LampDialog implements AliceInterface
      */
     public function listVerb()
     {
-        // TODO: Implement listVerb() method.
+        return ['свет', 'лампа', 'лампу'];
     }
 
     /**
@@ -24,7 +31,18 @@ class LampDialog implements AliceInterface
      */
     public function process($message)
     {
-        // TODO: Implement process() method.
+        if (is_array($message)) {
+            foreach ($message as $value) {
+                self::verb($value);
+            }
+        }
+        else {
+            if(!empty($message)) {
+                self::verb($message);
+            }
+        }
+
+        return $this->text;
     }
 
     /**
@@ -32,7 +50,20 @@ class LampDialog implements AliceInterface
      */
     public function verb($message)
     {
-        // TODO: Implement verb() method.
+        (in_array( $message, ['включить', 'включи', 'включай'] ))    ? self::turnOn() : null;
+        (in_array( $message, ['выключить', 'выключи', 'выключай'] )) ? self::turnOff() : null;
+    }
+
+    private function turnOn()
+    {
+        (new MqttService())->post('margulis/lamp01', 'on');
+        $this->text = 'Лампа включена';
+    }
+
+    private function turnOff()
+    {
+        (new MqttService())->post('margulis/lamp01', 'off');
+        $this->text = 'Лампа выключена';
     }
 
 }
