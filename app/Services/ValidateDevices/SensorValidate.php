@@ -66,10 +66,9 @@ class SensorValidate implements DeviceInterface
         // diagnostic and check
         $model = Cache::get($this->topicModel);
         if (empty($model)) {
-            \Log::debug('$model is empty');
-            \Log::debug($message);
             self::createDataset();
             self::process($model, $message);
+            //select in DB model data
         } else {
             self::process($model, $message);
         }
