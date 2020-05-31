@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 //use App\Helpers\TelegramHelper;
 use App\Services\TelegramService;
+use App\Services\WeatherService;
 use App\Weather;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -112,24 +113,9 @@ class telegram_weather extends Command
      */
     protected function getAcuweather()
     {
-        $page    = file_get_contents( 'http://apidev.accuweather.com/currentconditions/v1/291309.json?language=ru-ru&apikey=hoArfRosT1215' );
-        $decoded = json_decode( $page, true );
-        if ( is_array( $decoded ) ) {
-            if ( ! empty( $decoded[0]['Temperature']['Metric']['Value'] ) ) {
-                $this->temp = $decoded[0]['Temperature']['Metric']['Value'];
-                $this->weather_spec = $decoded[0]['WeatherText'];
-                return true;
-            }
-        }
-        /** @var Weather $model */
-        $model = Weather::latest()->first();
-        if ($model) {
-            $this->temp = $model->temperature.'_from_db';
-            $this->weather_spec = $model->spec.'_from_db';
-            return true;
-        }
-        $this->temp = 'not extracted';
-        $this->weather_spec = 'not extracted';
+        $weather            = (new WeatherService())->getAcuweather();
+        $this->temp         = $weather['temperature'];
+        $this->weather_spec = $weather['spec'];
     }
 
 }
