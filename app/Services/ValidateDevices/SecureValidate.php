@@ -63,14 +63,12 @@ class SecureValidate implements DeviceInterface
     {
         if (!Cache::has($this->topicModel) || is_null(Cache::get($this->topicModel))) {
             self::createDataset();
-            sleep(0.5);
         }
-        // diagnostic and check
         $model = Cache::get($this->topicModel);
         if (empty($model)) {
             self::createDataset();
+            $model = MqttSecure::all();
             self::process($model, $message);
-            //select in DB model data
         } else {
             self::process($model, $message);
         }
