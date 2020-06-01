@@ -80,7 +80,8 @@ class SensorValidate implements DeviceInterface
             if ($value['topic'] == $message->topic) {
                 if (
                     ($value['from_condition'] && (integer)$message->payload < (integer)$value['from_condition']) ||
-                    ($value['to_condition'] && (integer)$message->payload > (integer)$value['to_condition'])
+                    ($value['to_condition'] && (integer)$message->payload > (integer)$value['to_condition']) ||
+                    ($value['type'] == 3 && (integer)$value['to_condition'] !== (integer)$message->payload) // leakage
                 ) {
                     $text = DataService::getTextNotify($value['message_warn'], (string)$message->payload);
                     DeviceService::SendNotify(new SensorNotify($text, $message));
