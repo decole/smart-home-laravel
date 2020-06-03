@@ -38,7 +38,7 @@ class SensorValidate implements DeviceInterface
             return $value = Cache::get($this->topicList);
         }
 
-        return self::createDataset();
+        return $this->createDataset();
     }
 
     /**
