@@ -39,7 +39,9 @@ class RelayValidate implements DeviceInterface
             return $value = Cache::get($this->topicList);
         }
 
-        return $this->createDataset();
+        $this->createDataset();
+        $model = MqttRelay::all();
+        return array_merge($model->pluck('topic')->toArray(), $model->pluck('check_topic')->toArray());
     }
 
     /**
@@ -47,7 +49,7 @@ class RelayValidate implements DeviceInterface
      *
      * кэшируется модели реле и топики - топики это смесь проверочных топиков и топиков для комманд
      *
-     * @return array
+     * @return void
      */
     public function createDataset()
     {
@@ -55,7 +57,6 @@ class RelayValidate implements DeviceInterface
         $topics = array_merge($model->pluck('topic')->toArray(), $model->pluck('check_topic')->toArray());
         Cache::put($this->topicModel, $model);
         Cache::put($this->topicList, $topics);
-        return $topics;
     }
 
     /**

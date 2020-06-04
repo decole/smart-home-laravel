@@ -47,7 +47,6 @@ final class DeviceService
     public function __construct()
     {
         self::refresh();
-
         $this->sensor     = new SensorValidate($this->sensor_list, $this->sensor_model);
         $this->relay      = new RelayValidate($this->relay_list, $this->relay_model);
         $this->secure     = new SecureValidate($this->secure_list, self::$secure_model);

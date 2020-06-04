@@ -38,12 +38,13 @@ class SensorValidate implements DeviceInterface
             return $value = Cache::get($this->topicList);
         }
 
-        return $this->createDataset();
+        $this->createDataset();
+        return MqttSensor::all()->pluck('topic')->toArray();
     }
 
     /**
      * @inheritDoc
-     * @return array
+     * @return void
      */
     public function createDataset()
     {
@@ -51,7 +52,6 @@ class SensorValidate implements DeviceInterface
         $topics = $model->pluck('topic')->toArray();
         Cache::put($this->topicModel, $model);
         Cache::put($this->topicList, $topics);
-        return $topics;
     }
 
     /**

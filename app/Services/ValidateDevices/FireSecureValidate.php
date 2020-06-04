@@ -39,7 +39,8 @@ class FireSecureValidate implements DeviceInterface
             return $value = Cache::get($this->topicList);
         }
 
-        return $this->createDataset();
+        $this->createDataset();
+        return MqttFireSecure::all()->pluck('topic')->toArray();
     }
 
     /**
