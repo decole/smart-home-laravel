@@ -85,15 +85,7 @@ class SecureApi extends Controller
      */
     public function getTrigger($topic)
     {
-        $state = null;
-        $secureTopics = DeviceService::getSecureModel();
-        foreach ($secureTopics as $secure) {
-            if ($secure['topic'] == $topic) {
-                $state = $secure['trigger'];
-                break;
-            }
-        }
-        return $state;
+        return MqttSecure::where('topic', '=',$topic )->get('trigger')->first()->trigger;
     }
 
 }

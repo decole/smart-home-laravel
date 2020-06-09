@@ -9,8 +9,10 @@ use App\Services\ValidateDevices\RelayValidate;
 use App\Services\ValidateDevices\SecureValidate;
 use App\Services\ValidateDevices\SensorValidate;
 use App\User;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 final class DeviceService
@@ -34,7 +36,8 @@ final class DeviceService
      */
     private $secure;
     protected $secure_list = 'secure_list';
-    protected static $secure_model = 'secures';
+    protected $secure_model = 'secures';
+    public static $secure_cache_model = 'secures';
 
     /**
      * @var FireSecureValidate
@@ -49,28 +52,43 @@ final class DeviceService
         self::refresh();
         $this->sensor     = new SensorValidate($this->sensor_list, $this->sensor_model);
         $this->relay      = new RelayValidate($this->relay_list, $this->relay_model);
-        $this->secure     = new SecureValidate($this->secure_list, self::$secure_model);
+        $this->secure     = new SecureValidate($this->secure_list, $this->secure_model);
         $this->fireSecure = new FireSecureValidate($this->fireSecure_list, $this->fireSecure_model);
     }
 
     /**
      * @param $message
-     * @return void
+     * @return bool|void
      */
     public function route($message)
     {
-        if (in_array($message->topic, $this->sensor->getTopics())) {
-            $this->sensor->deviceValidate($message);
-        }
-        if (in_array($message->topic, $this->relay->getTopics())) {
-            $this->relay->deviceValidate($message);
-        }
-        if (in_array($message->topic, $this->secure->getTopics())) {
-            $this->secure->deviceValidate($message);
-        }
-        if (in_array($message->topic, $this->fireSecure->getTopics())) {
-            $this->fireSecure->deviceValidate($message);
-        }
+            if (empty($message) || empty($message->topic)) {
+                return false;
+            }
+//            $ar = [
+//                $this->sensor,
+//                $this->relay,
+//                $this->secure,
+//                $this->fireSecure
+//            ];
+//            foreach ($ar as $value) {
+//                if ( in_array($message->topic, $value->getTopics()) ) {
+//                    break;
+//                }
+//            }
+
+            if (in_array($message->topic, $this->sensor->getTopics())) {
+                $this->sensor->deviceValidate($message);
+            }
+            if (in_array($message->topic, $this->relay->getTopics())) {
+                $this->relay->deviceValidate($message);
+            }
+            if (in_array($message->topic, $this->secure->getTopics())) {
+                $this->secure->deviceValidate($message);
+            }
+            if (in_array($message->topic, $this->fireSecure->getTopics())) {
+                $this->fireSecure->deviceValidate($message);
+            }
     }
 
     /**
@@ -87,7 +105,7 @@ final class DeviceService
         Cache::forget($this->relay_model);
 
         Cache::forget($this->secure_list);
-        Cache::forget(self::$secure_model);
+        Cache::forget($this->secure_model);
 
         Cache::forget($this->fireSecure_list);
         Cache::forget($this->fireSecure_model);
@@ -144,9 +162,4 @@ final class DeviceService
         }
     }
 
-    public static function getSecureModel()
-    {
-        $secure_model = self::$secure_model;
-        return Cache::get($secure_model);
-    }
 }
