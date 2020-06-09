@@ -77,7 +77,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('margulis') }}" class="nav-link">
-                        <i class="fas fa-folder-open"></i>
+                        <i class="fas fa-border-style"></i>
                         <p>
                             Пристройка
                         </p>
