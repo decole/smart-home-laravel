@@ -149,62 +149,10 @@ class TelegramService extends BaseController
 //                    . ' updates'
 //                );
             } else {
-                echo date('Y-m-d H:i:s', time()) . ' - Failed to fetch updates' . PHP_EOL;
                 Log::channel('telegramBot')->info($server_response->printError());
             }
         } catch (TelegramException $e) {
             echo $e->getMessage();
-            //Log::channel('telegramBot')->error($e);
         }
-
     }
-
-//    /**
-//     * get updates from hook
-//     *
-//     * @param Request $request
-//     * @return string
-//     */
-//    public function getHook()
-//    {
-//        try {
-//            /** @var Telegram $telegram */
-//            $telegram = $this->telegram;
-//            $telegram->setCommandConfig('weather', ['owm_api_key' => 'hoArfRosT1215']);
-//            $telegram->addCommandsPaths($this->commands_paths);
-//            $telegram->enableAdmins($this->admin_users);
-//            $telegram->useGetUpdatesWithoutDatabase();
-//            $telegram->enableLimiter();
-//            $telegram->handle();
-//            //$server_response = $telegram->handle();
-//            //Log::channel('telegramBot')->error($server_response->getResult());
-//        } catch (TelegramException $e) {
-//            echo $e->getMessage();
-//            // Log telegram errors
-//            //TelegramLog::error($e);
-//            Log::channel('telegramBot')->error($e);
-//        }
-//        return 'web-hook';
-//
-//    }
-
-//    /**
-//     * set webhook from telegram.org
-//     *
-//     * @return string
-//     * @throws TelegramException
-//     */
-//    public function setHook()
-//    {
-//        // Create Telegram API object
-//        $telegram = $this->telegram;
-//        // Set webhook
-//        $result = $telegram->setWebhook($this->hookUrl);
-//        if ($result->isOk()) {
-//            return $result->getDescription();
-//        }
-//        return 'set hook';
-//
-//    }
-
 }
