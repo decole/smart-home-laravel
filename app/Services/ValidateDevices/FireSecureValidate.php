@@ -25,6 +25,7 @@ class FireSecureValidate implements DeviceInterface
     {
         $this->topicList = $topicList;
         $this->topicModel = $topicsModel;
+        $this->createDataset();
     }
 
     /**

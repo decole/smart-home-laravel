@@ -62,7 +62,7 @@ final class DeviceService
      */
     public function route($message)
     {
-            if (empty($message) || empty($message->topic)) {
+            if ($message->topic === null || $message->payload === null) {
                 return false;
             }
 //            $ar = [
@@ -78,16 +78,16 @@ final class DeviceService
 //            }
 
             if (in_array($message->topic, $this->sensor->getTopics())) {
-                $this->sensor->deviceValidate($message);
+                return $this->sensor->deviceValidate($message);
             }
             if (in_array($message->topic, $this->relay->getTopics())) {
-                $this->relay->deviceValidate($message);
+                return $this->relay->deviceValidate($message);
             }
             if (in_array($message->topic, $this->secure->getTopics())) {
-                $this->secure->deviceValidate($message);
+                return $this->secure->deviceValidate($message);
             }
             if (in_array($message->topic, $this->fireSecure->getTopics())) {
-                $this->fireSecure->deviceValidate($message);
+                return $this->fireSecure->deviceValidate($message);
             }
     }
 

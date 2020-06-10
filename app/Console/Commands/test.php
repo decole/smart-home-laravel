@@ -7,6 +7,7 @@ use App\MqttHistory;
 use App\MqttHistoryFireSecure;
 use App\MqttHistorySecure;
 use App\MqttHistoryWatering;
+use App\MqttSecure;
 use App\MqttSensor;
 use App\Notification;
 use DateInterval;
@@ -14,6 +15,7 @@ use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
+use Illuminate\Support\Facades\Cache;
 use phpDocumentor\Reflection\Types\Object_;
 
 class test extends Command
@@ -50,6 +52,10 @@ class test extends Command
      */
     public function handle()
     {
+        $model = MqttSecure::all();
+        $topics = $model->pluck('topic')->toArray();
+        $model = Cache::get('secures');
+        $this->info(var_export($model, true));
         /*
         $this->info('start after 3 month clear');
         Notification::whereDate('created_at', '<', (new \Carbon\Carbon)->submonths(1) )->each(function ($item) {
