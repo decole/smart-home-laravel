@@ -1,24 +1,9 @@
-
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Авторизация | {{ config('app.name', 'Laravel') }}</title>
+    <title>Восстановление пароля | {{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="{{ asset("favicons/cropped-favicon-32x32.png") }}" sizes="32x32" />
     <link rel="icon" href="{{ asset("favicons/cropped-favicon-192x192.png") }}" sizes="192x192" />
     <link rel="apple-touch-icon-precomposed" href="{{ asset("favicons/cropped-favicon-180x180.png") }}" />
