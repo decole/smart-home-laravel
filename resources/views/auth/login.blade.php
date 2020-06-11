@@ -84,6 +84,10 @@
 {{--            <p class="mb-0">--}}
 {{--                <a href="/register" class="text-center">Регистрация нового пользователя</a>--}}
 {{--            </p>--}}
+            <p class="mb-0 text-center">
+                <img src="{{ asset('images/gismeteo.png') }}" alt="gismeteo logo">
+            </p>
+
         </div>
         <!-- /.login-card-body -->
     </div>
