@@ -40,4 +40,28 @@ Route::prefix('/secure')->group(function () {
 
 Route::any('/alice', 'AliceController@index');
 
+Route::prefix('/alice_home')->group(function () {
+    /**
+     *  Ресурс	                    Описание	                                    Метод
+     *  /v1.0/	                    Проверка доступности Endpoint URL провайдера	HEAD
+     *  /v1.0/user/unlink	        Оповещение о разъединении аккаунтов	            POST
+     *  /v1.0/user/devices	        Информация об устройствах пользователя	        GET
+     *  /v1.0/user/devices/query	Информация о состояниях устройств пользователя	POST
+     *  /v1.0/user/devices/action	Изменение состояния у устройств                 POST
+     */
+
+    Route::get('/', 'Api\SmartHomeApi@index');
+
+    Route::get('/v1.0/', 'Api\SmartHomeApi@index');
+
+    Route::post('/v1.0/user/unlink', 'Api\SmartHomeApi@unlink');
+
+    Route::get('/v1.0/user/devices', 'Api\SmartHomeApi@devices');
+
+    Route::post('/v1.0/user/devices/query', 'Api\SmartHomeApi@devicesQuery');
+
+    Route::post('/v1.0/user/devices/action', 'Api\SmartHomeApi@devicesAction');
+
+});
+
 Route::any('/greenhouse', 'MqttHistoryController@get');
